@@ -1,5 +1,3 @@
-from gods import get_god_data
-from items import get_item_data
 from bs4 import BeautifulSoup
 from tqdm import tqdm
 from argparse import ArgumentParser
@@ -8,6 +6,10 @@ import time
 import random
 import json
 import os
+
+from gods import get_god_data
+from items import get_item_data
+from manifest import create_manifest
 
 WIKI_HOME = "https://wiki.smite2.com"
 DATA_ROOT = "./data"
@@ -100,6 +102,7 @@ if __name__ == "__main__":
     parser.add_argument("--skip-gods", "-g", action="store_true")
     parser.add_argument("--skip-items", "-i", action="store_true")
     parser.add_argument("--outpath", "-o", type=str, default=DATA_ROOT)
+    parser.add_argument("--manifest", "-m", type=str, default="TODO")
 
     args = parser.parse_args()
 
@@ -110,6 +113,10 @@ if __name__ == "__main__":
     if not args.skip_items:
         print("Scraping Items:")
         scrape_items(args.outpath)
+
+    if args.manifest:
+        print("Building Manifest")
+        create_manifest(args.outpath, args.manifest)
 
     print("Done :)")
     print(f"JSON files saved in {args.outpath}")
