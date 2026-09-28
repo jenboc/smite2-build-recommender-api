@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 from tqdm import tqdm
 from argparse import ArgumentParser
+from pydantic import BaseModel
 import requests
 import time
 import random
@@ -65,20 +66,21 @@ def get_item_list() -> list[str]:
     return item_urls
 
 
-def save_json(data: dict, output_dir: str) -> None:
+def save_json(data: BaseModel, output_dir: str) -> None:
     os.makedirs(output_dir, exist_ok=True)
 
-    filename = data["name"].lower().replace(" ", "_").replace("'", "") + ".json"
+    filename = data.name.lower().replace(" ", "_").replace("'", "") + ".json"
     filepath = os.path.join(output_dir, filename)
 
     with open(filepath, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=2, ensure_ascii=False)
+        json.dump(data.model_dump(), f, indent=2, ensure_ascii=False)
 
 
 def scrape_gods(outpath: str = DATA_ROOT) -> None:
     gods_urls = get_god_list()
 
-    for url in tqdm(gods_urls):
+    for i, url in enumerate(gods_urls):
+        print(f"\t{i + 1}. {url}")
         sleep_random_delay()
         god_data = get_god_data(url)
         save_json(god_data, os.path.join(outpath, "gods"))
@@ -87,7 +89,8 @@ def scrape_gods(outpath: str = DATA_ROOT) -> None:
 def scrape_items(outpath: str = DATA_ROOT) -> None:
     item_urls = get_item_list()
 
-    for url in tqdm(item_urls):
+    for i, url in enumerate(item_urls):
+        print(f"\t{i + 1}. {url}")
         sleep_random_delay()
         item_data = get_item_data(url)
         save_json(item_data, os.path.join(outpath, "items"))

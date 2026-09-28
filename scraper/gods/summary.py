@@ -1,9 +1,11 @@
 from bs4 import BeautifulSoup
 import re
 
+from models.stats import GodBaseStat, ValueUnit
+
 
 # Parse strings of the form "56.25 (+25%)" or "115 (+30)"
-def parse_base_stat_value_string(s: str) -> dict[str, float]:
+def parse_base_stat_value_string(s: str) -> ValueUnit:
     match = re.search(r'([-+]?\d+\.?\d*)\s*(%)?', s)
 
     if match is None:
@@ -11,10 +13,10 @@ def parse_base_stat_value_string(s: str) -> dict[str, float]:
 
     value = float(match.group(1))
     unit = "percent" if match.group(2) else "flat"
-    return {"value": value, "unit": unit}
+    return ValueUnit(value=value, unit=unit)
 
 
-def parse_base_stat(s: str) -> dict:
+def parse_base_stat(s: str) -> GodBaseStat:
     matches = re.findall(r'[-+]?\d+\.?\d*%?', s)
 
     if matches is None or len(matches) == 0:
@@ -25,7 +27,7 @@ def parse_base_stat(s: str) -> dict:
     if len(parsed) != 2:
         raise ValueError(f"Expected 3 values, found {len(parsed)}")
 
-    return {"base": parsed[0], "per_level": parsed[1]}
+    return GodBaseStat(base=parsed[0], per_level=parsed[1])
 
 
 def parse_god_summary(soup: BeautifulSoup) -> dict:

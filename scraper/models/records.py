@@ -1,15 +1,24 @@
 from pydantic import BaseModel, Field, field_validator, model_validator
+from typing import Literal
+
 from models.stats import GodBaseStat, ValueUnit
 from models.abilities import Abilities, Aspect
+
+DamageType = Literal["Magical", "Physical"]
+DamageRange = Literal["Melee", "Ranged"]
 
 
 class God(BaseModel):
     name: str = Field(min_length=1)
+    roles: list = Field(min_length=1)
+    damage_type: DamageType
+    damage_range: DamageRange
+    specialisations: list = Field(min_length=1)
     base_stats: dict[str, GodBaseStat | None]
     abilities: Abilities
     aspect: Aspect | None = None
 
-    @field_validator("base_stat")
+    @field_validator("base_stats")
     @classmethod
     def mana_may_be_none(cls, v: dict[str, GodBaseStat | None]) -> dict[str, GodBaseStat | None]:
         # (In the case of Manaless Gods, e.g. Bari)

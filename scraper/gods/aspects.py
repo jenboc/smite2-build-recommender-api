@@ -1,5 +1,7 @@
-from gods.abilities import parse_ability_block
 from bs4 import BeautifulSoup
+
+from gods.abilities import parse_ability_block, merge_slot
+from models.abilities import Aspect, AbilityOverrides
 
 
 def parse_aspect_info(info_table: BeautifulSoup) -> dict:
@@ -11,11 +13,11 @@ def parse_aspect_info(info_table: BeautifulSoup) -> dict:
     }
 
 
-def parse_aspect_section(soup: BeautifulSoup) -> dict:
+def parse_aspect_section(soup: BeautifulSoup) -> Aspect:
     aspect_h2 = soup.find("h2", id="God_Aspect")
 
     if aspect_h2 is None:
-        return {}
+        return None
 
     aspect_div = aspect_h2.find_parent("div")
 
@@ -46,6 +48,11 @@ def parse_aspect_section(soup: BeautifulSoup) -> dict:
         return aspect
 
     blocks = [parse_ability_block(block) for block in changed_abilities]
-    aspect["changed_abilities"] = {k: v for d in blocks for k, v in d.items()}
+    modifies_data = {}
+    for d in blocks:
+        for k, v in d.items():
+            merge_slot(modifies_data, k, v)
 
-    return aspect
+    aspect["modifies"] = AbilityOverrides.model_validate(modifies_data)
+
+    return Aspect.model_validate(aspect)

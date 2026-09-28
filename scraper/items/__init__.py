@@ -2,6 +2,8 @@ from items.summary import parse_item_summary
 from bs4 import BeautifulSoup
 import requests
 
+from models.records import Item
+
 
 def parse_item_notes(soup: BeautifulSoup) -> dict:
     notes_h2 = soup.find("h2", id="Notes")
@@ -23,11 +25,11 @@ def parse_item_notes(soup: BeautifulSoup) -> dict:
     ]
 
 
-def get_item_data(url: str) -> dict:
+def get_item_data(url: str) -> Item:
     resp = requests.get(url)
     soup = BeautifulSoup(resp.text, "html.parser")
 
     data = parse_item_summary(soup)
     data["notes"] = parse_item_notes(soup)
 
-    return data
+    return Item.model_validate(data)

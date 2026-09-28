@@ -50,6 +50,11 @@ class GodBaseStat(BaseModel):
 
 
 # Pydantic figures out types based on the type attribute
-AbilityStat = Annotated[
+Stat = Annotated[
     Union[TieredStat, ScaledStat, TextStat], Field(discriminator="type")
 ]
+
+
+class AbilityStat(BaseModel):
+    name: str = Field(min_length=1)
+    data: Stat

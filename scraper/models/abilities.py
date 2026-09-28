@@ -14,12 +14,13 @@ class Ability(BaseModel):
     variant: str | None = None
     tags: list[str] = Field(default_factory=list)
     description: str
-    data: dict[str, AbilityStat] = Field(default_factory=dict)
+    stats: list[AbilityStat] = Field(default_factory=dict),
+    notes: list[str] = Field(default_factory=list)
 
 
-class Stance(BaseModel):
-    """The kit for an individual stance. This may be incomplete, with the
-    incomplete fields being given by the god's 'base' stance kit"""
+class AbilityOverrides(BaseModel):
+    """A partially-complete ability set. Used for both partial stances
+    and aspect modifications"""
     basic_attack: list[Ability] = Field(default_factory=list)
     passive: list[Ability] = Field(default_factory=list)
     first: list[Ability] = Field(default_factory=list, alias="1")
@@ -33,10 +34,15 @@ class Stance(BaseModel):
         return {slot for slot in ALL_SLOTS if getattr(self, slot)}
 
 
+class Stance(AbilityOverrides):
+    """An ability set a god can switch to mid-match"""
+    pass
+
+
 class Aspect(BaseModel):
     name: str
     description: str
-    modifies: dict[SlotName, list[Ability]] = Field(default_factory=dict)
+    modifies: AbilityOverrides = Field(default_factory=AbilityOverrides)
 
 
 class Abilities(BaseModel):

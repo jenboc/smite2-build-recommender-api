@@ -44,7 +44,9 @@ def parse_item_summary(soup: BeautifulSoup) -> dict:
         if r.find("th") is not None and r.find("td") is not None
     }
 
-    data["item_type"] = parse_item_type(box_data["Item Type:"])
+    item_type = parse_item_type(box_data["Item Type:"])
+    data["tier"] = item_type["tier"]
+    data["category"] = item_type["type"]
     data["cost"] = int(box_data["Cost:"])
 
     try:

@@ -1,11 +1,13 @@
-from gods.abilities import parse_ability_section
-from gods.summary import parse_god_summary
-from gods.aspects import parse_aspect_section
 from bs4 import BeautifulSoup
 import requests
 
+from models import God
+from gods.abilities import parse_ability_section
+from gods.summary import parse_god_summary
+from gods.aspects import parse_aspect_section
 
-def get_god_data(url: str) -> dict:
+
+def get_god_data(url: str) -> God:
     resp = requests.get(url)
     soup = BeautifulSoup(resp.text, "html.parser")
 
@@ -13,4 +15,4 @@ def get_god_data(url: str) -> dict:
     data["abilities"] = parse_ability_section(soup)
     data["aspect"] = parse_aspect_section(soup)
 
-    return data
+    return God.model_validate(data)
