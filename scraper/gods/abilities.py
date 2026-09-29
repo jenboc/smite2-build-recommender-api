@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import re
 
 from models.stats import (TieredStat, ScaledComponent,
-                          ScaledStat, TextStat, AbilityStat)
+                          ScaledStat, TextStat, AbilityStat, ValueUnit)
 from models.abilities import Ability, Stance, Abilities
 
 
@@ -40,8 +40,10 @@ def parse_scaled_component(term: str) -> ScaledComponent:
     value, percent_sign, stat = match.groups()
 
     return ScaledComponent(
-        value=float(value),
-        unit="percent" if percent_sign else "flat",
+        value_unit=ValueUnit(
+            value=float(value),
+            unit="percent" if percent_sign else "flat"
+        ),
         of=stat.strip()
     )
 

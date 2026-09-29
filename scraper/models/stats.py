@@ -18,8 +18,7 @@ class TieredStat(BaseModel):
 
 class ScaledComponent(BaseModel):
     """'70% Intelligence', '70% of Recent Damage'"""
-    value: float
-    unit: Unit
+    value_unit: ValueUnit
     of: str
 
     @field_validator("of")

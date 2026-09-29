@@ -1,5 +1,4 @@
 from bs4 import BeautifulSoup
-from tqdm import tqdm
 from argparse import ArgumentParser
 from pydantic import BaseModel
 import requests
