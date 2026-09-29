@@ -8,5 +8,5 @@ import lombok.Getter;
 public class Aspect {
     private @Getter String name;
     private @Getter String description;
-    private @Getter AbilityOverrides modifies;
+    private @Getter AbilitySet modifies;
 }

@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
-public class AbilityOverrides {
+public class AbilitySet {
     private @Getter Ability basicAttack;
     private @Getter Ability passive;
     private @Getter Ability first;

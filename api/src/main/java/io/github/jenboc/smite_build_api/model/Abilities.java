@@ -7,5 +7,5 @@ import lombok.Getter;
 
 @AllArgsConstructor
 public class Abilities {
-    private @Getter Dictionary<String, Stance> stances;
+    private @Getter Dictionary<String, AbilitySet> stances;
 }
