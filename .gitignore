@@ -1,2 +1,69 @@
 __pycache__/
 data/
+
+# =========================
+# Java / Maven
+# =========================
+target/
+*.class
+
+# =========================
+# Gradle
+# =========================
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# =========================
+# Spring Boot
+# =========================
+*.log
+logs/
+
+# Local environment/config
+.env
+.env.*
+application-local.properties
+application-local.yml
+application-local.yaml
+
+# =========================
+# IDEs
+# =========================
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Eclipse
+.factorypath
+.classpath
+.project
+.settings/
+.springBeans
+.sts4-cache/
+
+# VS Code
+.vscode/
+
+# =========================
+# OS
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Temporary files
+# =========================
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# =========================
+# Generated files
+# =========================
+generated/
