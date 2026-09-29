@@ -14,15 +14,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
 import tools.jackson.databind.json.JsonMapper;
 
-/**
- * Deserialises a *real* scraped god JSON file, not a hand-written fixture --
- * the point is to catch mismatches between what the scraper actually
- * produces and what the model classes expect (missing @JsonProperty,
- * wrong polymorphic type info, naming strategy gaps, etc.), which a
- * hand-crafted test payload could accidentally paper over.
+/*
+ * Test JSON deserialisation against a real JSON file to catch mismatches between
+ * model expectations and the reality of the data produced from the scraper.
  *
  * The file lives at src/test/resources/gods/merlin.json -- a copy of a
- * real scraped file, picked because Merlin exercises stances *and* an
+ * real scraped file, picked because Merlin exercises stances and an
  * aspect in one file. Update this copy whenever the scraper's output
  * shape changes, so this test keeps testing against current reality.
  */

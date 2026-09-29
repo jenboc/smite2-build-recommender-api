@@ -15,20 +15,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
 import tools.jackson.databind.json.JsonMapper;
  
-/**
- * Deserialises real scraped item JSON files, same rationale as
- * GodDeserialisationTest -- catches mismatches between actual scraper
- * output and what Item/ValueUnit/Unit expect, that a hand-written fixture
- * could accidentally paper over.
+/*
+ * Tests JSON deserialisation of item files, following the same rationale as
+ * GodDeserialisationTest
  *
  * Fixtures live under src/test/resources/items/. Two are used deliberately,
  * to cover both shapes an item can take:
  *   - gauntlet_of_thebes.json: has a passive_effect, no active_effect
- *   - (pick a second item that HAS an active_effect, e.g. a relic-adjacent
- *     or actively-used item) -- swap the filename below once you've picked one
- *
- * Copy real files from data/items/ here whenever the scraper's item output
- * shape changes, so this test keeps testing against current reality.
+ *   - aegis_of_acceleration.json: has a active_effect, no passive_effect
  */
 @SpringBootTest
 class ItemDeserialisationTest {
@@ -44,8 +38,8 @@ class ItemDeserialisationTest {
  
     @ParameterizedTest
     @ValueSource(strings = {
-            "gauntlet_of_thebes.json",
-            "aegis_of_acceleration.json"
+        "gauntlet_of_thebes.json",
+        "aegis_of_acceleration.json"
     })
     void deserialisesWithoutThrowing(String filename) {
         assertDoesNotThrow(() -> load(filename));
@@ -53,8 +47,8 @@ class ItemDeserialisationTest {
  
     @ParameterizedTest
     @ValueSource(strings = {
-            "gauntlet_of_thebes.json",
-            "aegis_of_acceleration.json"
+        "gauntlet_of_thebes.json",
+        "aegis_of_acceleration.json"
     })
     void coreFieldsArePopulated(String filename) throws IOException {
         Item item = load(filename);
@@ -75,10 +69,16 @@ class ItemDeserialisationTest {
  
         assertNotNull(item.getPassiveEffect());
         assertFalse(item.getPassiveEffect().isBlank());
-        // adjust this assertion if the scraper actually emits "" rather than
-        // null for an absent active effect -- confirm against the real
-        // scraped file before trusting either form
         assertTrue(item.getActiveEffect() == null || item.getActiveEffect().isBlank());
+    }
+
+    @Test
+    void aegisOfAccelerationHasActiveButNoPassive() throws IOException {
+        Item item = load("aegis_of_acceleration.json");
+ 
+        assertNotNull(item.getActiveEffect());
+        assertFalse(item.getActiveEffect().isBlank());
+        assertTrue(item.getPassiveEffect() == null || item.getPassiveEffect().isBlank());
     }
  
     @Test
