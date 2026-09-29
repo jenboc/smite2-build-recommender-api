@@ -1,0 +1,1521 @@
+{
+  "name": "Merlin",
+  "roles": [
+    "Mid"
+  ],
+  "damage_type": "Magical",
+  "damage_range": "Ranged",
+  "specialisations": [
+    "Nuker",
+    "Burst Damage"
+  ],
+  "base_stats": {
+    "health": {
+      "base": {
+        "value": 569.48,
+        "unit": "flat"
+      },
+      "per_level": {
+        "value": 86.48,
+        "unit": "flat"
+      }
+    },
+    "health_regen": {
+      "base": {
+        "value": 1.7,
+        "unit": "flat"
+      },
+      "per_level": {
+        "value": 0.2,
+        "unit": "flat"
+      }
+    },
+    "mana": {
+      "base": {
+        "value": 337.46,
+        "unit": "flat"
+      },
+      "per_level": {
+        "value": 45.36,
+        "unit": "flat"
+      }
+    },
+    "mana_regen": {
+      "base": {
+        "value": 1.56,
+        "unit": "flat"
+      },
+      "per_level": {
+        "value": 0.12,
+        "unit": "flat"
+      }
+    },
+    "physical_protection": {
+      "base": {
+        "value": 17.48,
+        "unit": "flat"
+      },
+      "per_level": {
+        "value": 2.76,
+        "unit": "flat"
+      }
+    },
+    "magical_protection": {
+      "base": {
+        "value": 27.38,
+        "unit": "flat"
+      },
+      "per_level": {
+        "value": 1.38,
+        "unit": "flat"
+      }
+    },
+    "attack_speed": {
+      "base": {
+        "value": 0.96,
+        "unit": "flat"
+      },
+      "per_level": {
+        "value": 1.4,
+        "unit": "percent"
+      }
+    },
+    "attack_power": {
+      "base": {
+        "value": 40.85,
+        "unit": "flat"
+      },
+      "per_level": {
+        "value": 2.21,
+        "unit": "flat"
+      }
+    },
+    "move_speed": {
+      "base": {
+        "value": 370.0,
+        "unit": "flat"
+      },
+      "per_level": {
+        "value": 0.0,
+        "unit": "flat"
+      }
+    }
+  },
+  "abilities": {
+    "stances": {
+      "Arcane": {
+        "basic_attack": [],
+        "passive": [],
+        "first": [
+          {
+            "name": "Eclipse",
+            "variant": null,
+            "tags": [
+              "Elemental Damage Spells"
+            ],
+            "description": "Conjure a celestial orb that grows in size as it travels, dealing Magical Damage to enemies and marking them",
+            "stats": [
+              {
+                "name": "Damage",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    50.0,
+                    75.0,
+                    100.0,
+                    125.0,
+                    150.0
+                  ],
+                  "unit": "flat"
+                }
+              },
+              {
+                "name": "Damage Scaling",
+                "data": {
+                  "type": "scaled",
+                  "components": [
+                    {
+                      "value": 55.0,
+                      "unit": "percent",
+                      "of": "Intelligence"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "Damage Per Tick",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    5.0,
+                    15.0,
+                    25.0,
+                    35.0,
+                    45.0
+                  ],
+                  "unit": "flat"
+                }
+              },
+              {
+                "name": "Damage Scaling Per Tick",
+                "data": {
+                  "type": "scaled",
+                  "components": [
+                    {
+                      "value": 10.0,
+                      "unit": "percent",
+                      "of": "Intelligence"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "Range",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    9.6
+                  ],
+                  "unit": "meters"
+                }
+              },
+              {
+                "name": "Initial Radius",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    0.8
+                  ],
+                  "unit": "meters"
+                }
+              },
+              {
+                "name": "Max Radius",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    2.4
+                  ],
+                  "unit": "meters"
+                }
+              },
+              {
+                "name": "Outer Radius",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    4.0
+                  ],
+                  "unit": "meters"
+                }
+              },
+              {
+                "name": "Cooldown",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    12.0
+                  ],
+                  "unit": "seconds"
+                }
+              },
+              {
+                "name": "Cost",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    60.0
+                  ],
+                  "unit": "mana"
+                }
+              }
+            ],
+            "notes": [
+              "Marked enemies take additional Magical Damage every 0.4 seconds while within the outer range of Eclipse",
+              "This ability passes through and damages all enemies, and passes through walls"
+            ]
+          }
+        ],
+        "second": [
+          {
+            "name": "Vortex",
+            "variant": null,
+            "tags": [
+              "Elemental Control Spells"
+            ],
+            "description": "Deploy a field of arcane energy. After a delay, the Vortex deals Magical Damage and Pulls enemies towards the center",
+            "stats": [
+              {
+                "name": "Damage",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    65.0,
+                    95.0,
+                    125.0,
+                    155.0,
+                    185.0
+                  ],
+                  "unit": "flat"
+                }
+              },
+              {
+                "name": "Damage Scaling",
+                "data": {
+                  "type": "scaled",
+                  "components": [
+                    {
+                      "value": 70.0,
+                      "unit": "percent",
+                      "of": "Intelligence"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "Range",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    9.6
+                  ],
+                  "unit": "meters"
+                }
+              },
+              {
+                "name": "Radius",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    3.2
+                  ],
+                  "unit": "meters"
+                }
+              },
+              {
+                "name": "Cooldown",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    14.0,
+                    13.5,
+                    13.0,
+                    12.5,
+                    12.0
+                  ],
+                  "unit": "seconds"
+                }
+              },
+              {
+                "name": "Cost",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    60.0,
+                    65.0,
+                    70.0,
+                    75.0,
+                    80.0
+                  ],
+                  "unit": "mana"
+                }
+              }
+            ],
+            "notes": []
+          }
+        ],
+        "third": [
+          {
+            "name": "Flicker",
+            "variant": null,
+            "tags": [
+              "Short Range Teleport"
+            ],
+            "description": "You quickly Teleport a short distance. Depending on your current Stance, you gain different effects when using this ability",
+            "stats": [
+              {
+                "name": "Heal",
+                "data": {
+                  "type": "scaled",
+                  "components": [
+                    {
+                      "value": 22.5,
+                      "unit": "percent",
+                      "of": "Recent Damage Taken"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "Range",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    4.8
+                  ],
+                  "unit": "meters"
+                }
+              },
+              {
+                "name": "Cooldown",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    24.0,
+                    23.0,
+                    22.0,
+                    21.0,
+                    20.0
+                  ],
+                  "unit": "seconds"
+                }
+              },
+              {
+                "name": "Cost",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    70.0
+                  ],
+                  "unit": "mana"
+                }
+              }
+            ],
+            "notes": [
+              "Heal a percentage of the damage taken within the last 4 seconds"
+            ]
+          }
+        ],
+        "ultimate": [
+          {
+            "name": "Elemental Mastery",
+            "variant": "",
+            "tags": [
+              "Radiate Damage",
+              "Change Stance"
+            ],
+            "description": "Tap into your inner potential, exploding with energy in your current stance dealing Magical Damage and Knocking Up enemies hit. Depending on your current Stance, you gain different effects when using this ability",
+            "stats": [
+              {
+                "name": "Damage",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    0.0,
+                    80.0,
+                    110.0,
+                    140.0,
+                    170.0,
+                    210.0
+                  ],
+                  "unit": "flat"
+                }
+              },
+              {
+                "name": "Damage Scaling",
+                "data": {
+                  "type": "scaled",
+                  "components": [
+                    {
+                      "value": 15.0,
+                      "unit": "percent",
+                      "of": "Intelligence"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "Radius",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    4.0
+                  ],
+                  "unit": "meters"
+                }
+              },
+              {
+                "name": "Cooldown",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    40.0,
+                    40.0,
+                    35.0,
+                    30.0,
+                    25.0,
+                    20.0
+                  ],
+                  "unit": "seconds"
+                }
+              },
+              {
+                "name": "Cost",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    40.0,
+                    40.0,
+                    50.0,
+                    60.0,
+                    70.0,
+                    80.0
+                  ],
+                  "unit": "mana"
+                }
+              }
+            ],
+            "notes": [
+              "After the explosion reaches its apex, it collapses in on itself dealing Magical Damage again",
+              "During the explosion time, you can choose which stance to enter into next"
+            ]
+          }
+        ]
+      },
+      "Fire": {
+        "basic_attack": [],
+        "passive": [],
+        "first": [
+          {
+            "name": "Radiate",
+            "variant": null,
+            "tags": [
+              "Elemental Damage Spells"
+            ],
+            "description": "Channel a beam of intense fire for 2 seconds that deals Magical Damage every 0.25 seconds",
+            "stats": [
+              {
+                "name": "Damage",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    12.0,
+                    19.0,
+                    26.0,
+                    33.0,
+                    40.0
+                  ],
+                  "unit": "flat"
+                }
+              },
+              {
+                "name": "Damage Scaling",
+                "data": {
+                  "type": "scaled",
+                  "components": [
+                    {
+                      "value": 20.0,
+                      "unit": "percent",
+                      "of": "Intelligence"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "Damage Per Tick",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    5.0,
+                    10.0,
+                    15.0,
+                    20.0,
+                    25.0
+                  ],
+                  "unit": "flat"
+                }
+              },
+              {
+                "name": "Damage Scaling Per Tick",
+                "data": {
+                  "type": "scaled",
+                  "components": [
+                    {
+                      "value": 5.0,
+                      "unit": "percent",
+                      "of": "Intelligence"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "Range",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    7.2
+                  ],
+                  "unit": "meters"
+                }
+              },
+              {
+                "name": "Radius",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    0.8
+                  ],
+                  "unit": "meters"
+                }
+              },
+              {
+                "name": "Cooldown",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    14.0,
+                    13.5,
+                    13.0,
+                    12.5,
+                    12.0
+                  ],
+                  "unit": "seconds"
+                }
+              },
+              {
+                "name": "Cost",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    60.0,
+                    65.0,
+                    70.0,
+                    75.0,
+                    80.0
+                  ],
+                  "unit": "mana"
+                }
+              }
+            ],
+            "notes": [
+              "Each time Radiate hits an enemy, it also applies a Burn, dealing additional Magical Damage over time",
+              "Burn does damage every 0.5 seconds for 2 seconds"
+            ]
+          }
+        ],
+        "second": [
+          {
+            "name": "Dragonfire",
+            "variant": null,
+            "tags": [
+              "Elemental Control Spells"
+            ],
+            "description": "Summon forth 2 ethereal dragons that deal Magical Damage to enemies every 0.25 seconds",
+            "stats": [
+              {
+                "name": "Damage",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    12.0,
+                    15.0,
+                    18.0,
+                    21.0,
+                    24.0
+                  ],
+                  "unit": "flat"
+                }
+              },
+              {
+                "name": "Damage Scaling",
+                "data": {
+                  "type": "scaled",
+                  "components": [
+                    {
+                      "value": 20.0,
+                      "unit": "percent",
+                      "of": "Intelligence"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "Protections Reduced",
+                "data": {
+                  "type": "scaled",
+                  "components": [
+                    {
+                      "value": 4.0,
+                      "unit": "percent",
+                      "of": "Stack"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "Max Debuff Stacks",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    4.0
+                  ],
+                  "unit": "flat"
+                }
+              },
+              {
+                "name": "Deploy Range",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    8.0
+                  ],
+                  "unit": "meters"
+                }
+              },
+              {
+                "name": "Range",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    4.0
+                  ],
+                  "unit": "meters"
+                }
+              },
+              {
+                "name": "Cone Angle",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    80.0
+                  ],
+                  "unit": "degrees"
+                }
+              },
+              {
+                "name": "Cooldown",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    16.0
+                  ],
+                  "unit": "seconds"
+                }
+              },
+              {
+                "name": "Cost",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    60.0,
+                    65.0,
+                    70.0,
+                    75.0,
+                    80.0
+                  ],
+                  "unit": "mana"
+                }
+              }
+            ],
+            "notes": [
+              "If caught in the center of the area, enemies are afflicted by Radiate's Burn and gods have their Protections Reduced",
+              "The dragons persist for 3 seconds"
+            ]
+          }
+        ],
+        "third": [
+          {
+            "name": "Flicker",
+            "variant": null,
+            "tags": [
+              "Short Range Teleport"
+            ],
+            "description": "You quickly Teleport a short distance. Depending on your current Stance, you gain different effects when using this ability",
+            "stats": [
+              {
+                "name": "Range",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    4.8
+                  ],
+                  "unit": "meters"
+                }
+              },
+              {
+                "name": "Cooldown",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    24.0,
+                    23.0,
+                    22.0,
+                    21.0,
+                    20.0
+                  ],
+                  "unit": "seconds"
+                }
+              },
+              {
+                "name": "Cost",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    70.0
+                  ],
+                  "unit": "mana"
+                }
+              }
+            ],
+            "notes": [
+              "For 4 seconds, your Attacks apply Radiate's Burn to enemies hit"
+            ]
+          }
+        ],
+        "ultimate": [
+          {
+            "name": "Elemental Mastery",
+            "variant": "",
+            "tags": [
+              "Radiate Damage",
+              "Change Stance"
+            ],
+            "description": "Tap into your inner potential, exploding with energy in your current stance dealing Magical Damage and applying Radiate's Burn to enemies hit. Depending on your current Stance, you gain different effects when using this ability",
+            "stats": [
+              {
+                "name": "Damage",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    0.0,
+                    80.0,
+                    110.0,
+                    140.0,
+                    170.0,
+                    210.0
+                  ],
+                  "unit": "flat"
+                }
+              },
+              {
+                "name": "Damage Scaling",
+                "data": {
+                  "type": "scaled",
+                  "components": [
+                    {
+                      "value": 15.0,
+                      "unit": "percent",
+                      "of": "Intelligence"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "Radius",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    4.0
+                  ],
+                  "unit": "meters"
+                }
+              },
+              {
+                "name": "Cooldown",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    40.0,
+                    40.0,
+                    35.0,
+                    30.0,
+                    25.0,
+                    20.0
+                  ],
+                  "unit": "seconds"
+                }
+              },
+              {
+                "name": "Cost",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    40.0,
+                    40.0,
+                    50.0,
+                    60.0,
+                    70.0,
+                    80.0
+                  ],
+                  "unit": "mana"
+                }
+              }
+            ],
+            "notes": [
+              "After the explosion reaches its apex, it collapses in on itself dealing Magical Damage again",
+              "During the explosion time, you can choose which stance to enter into next"
+            ]
+          }
+        ]
+      },
+      "Ice": {
+        "basic_attack": [],
+        "passive": [],
+        "first": [
+          {
+            "name": "Frostbolt",
+            "variant": null,
+            "tags": [
+              "Elemental Damage Spells"
+            ],
+            "description": "Fire a Frostbolt that explodes when it hits an enemy, dealing Magical Damage in a small area",
+            "stats": [
+              {
+                "name": "Damage",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    60.0,
+                    95.0,
+                    130.0,
+                    165.0,
+                    200.0
+                  ],
+                  "unit": "flat"
+                }
+              },
+              {
+                "name": "Damage Scaling",
+                "data": {
+                  "type": "scaled",
+                  "components": [
+                    {
+                      "value": 55.0,
+                      "unit": "percent",
+                      "of": "Intelligence"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "Range",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    11.2
+                  ],
+                  "unit": "meters"
+                }
+              },
+              {
+                "name": "Radius",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    0.64
+                  ],
+                  "unit": "meters"
+                }
+              },
+              {
+                "name": "Explosion Radius",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    3.2
+                  ],
+                  "unit": "meters"
+                }
+              },
+              {
+                "name": "Cooldown",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    6.0
+                  ],
+                  "unit": "seconds"
+                }
+              },
+              {
+                "name": "Cost",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    60.0
+                  ],
+                  "unit": "mana"
+                }
+              }
+            ],
+            "notes": [
+              "This ability deals an additional 15% damage if the enemy hit is Slowed",
+              "This ability stops on first target hit, and does not pass through walls"
+            ]
+          }
+        ],
+        "second": [
+          {
+            "name": "Blizzard",
+            "variant": null,
+            "tags": [
+              "Elemental Control Spells"
+            ],
+            "description": "Create a Blizzard, dealing Magical Damage repeatedly to enemies in an area",
+            "stats": [
+              {
+                "name": "Damage Per Tick",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    10.0,
+                    25.0,
+                    40.0,
+                    55.0,
+                    70.0
+                  ],
+                  "unit": "flat"
+                }
+              },
+              {
+                "name": "Damage Scaling Per Tick",
+                "data": {
+                  "type": "scaled",
+                  "components": [
+                    {
+                      "value": 15.0,
+                      "unit": "percent",
+                      "of": "Intelligence"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "Slow",
+                "data": {
+                  "type": "scaled",
+                  "components": [
+                    {
+                      "value": 8.0,
+                      "unit": "percent",
+                      "of": "Stack"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "Max Debuff Stacks",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    5.0
+                  ],
+                  "unit": "flat"
+                }
+              },
+              {
+                "name": "Slow Duration",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    2.0
+                  ],
+                  "unit": "seconds"
+                }
+              },
+              {
+                "name": "Range",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    8.8
+                  ],
+                  "unit": "meters"
+                }
+              },
+              {
+                "name": "Radius",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    3.2
+                  ],
+                  "unit": "meters"
+                }
+              },
+              {
+                "name": "Cooldown",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    6.0
+                  ],
+                  "unit": "seconds"
+                }
+              },
+              {
+                "name": "Cost",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    60.0
+                  ],
+                  "unit": "mana"
+                }
+              }
+            ],
+            "notes": [
+              "Enemies hit are debuffed with a stacking Slow",
+              "This ability hits 8 times over 4 seconds"
+            ]
+          }
+        ],
+        "third": [
+          {
+            "name": "Flicker",
+            "variant": null,
+            "tags": [
+              "Short Range Teleport"
+            ],
+            "description": "You quickly Teleport a short distance. Depending on your current Stance, you gain different effects when using this ability",
+            "stats": [
+              {
+                "name": "Cooldown Reduction",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    2.0
+                  ],
+                  "unit": "seconds"
+                }
+              },
+              {
+                "name": "Range",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    4.8
+                  ],
+                  "unit": "meters"
+                }
+              },
+              {
+                "name": "Cooldown",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    24.0,
+                    23.0,
+                    22.0,
+                    21.0,
+                    20.0
+                  ],
+                  "unit": "seconds"
+                }
+              },
+              {
+                "name": "Cost",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    70.0
+                  ],
+                  "unit": "mana"
+                }
+              }
+            ],
+            "notes": [
+              "Ability Cooldowns are reduced",
+              "Ability Cooldown Reduction does not apply to Flicker"
+            ]
+          }
+        ],
+        "ultimate": [
+          {
+            "name": "Elemental Mastery",
+            "variant": "",
+            "tags": [
+              "Radiate Damage",
+              "Change Stance"
+            ],
+            "description": "Tap into your inner potential, exploding with energy in your current stance dealing Magical Damage and Slowing enemies hit. Depending on your current Stance, you gain different effects when using this ability",
+            "stats": [
+              {
+                "name": "Damage",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    0.0,
+                    80.0,
+                    110.0,
+                    140.0,
+                    170.0,
+                    210.0
+                  ],
+                  "unit": "flat"
+                }
+              },
+              {
+                "name": "Damage Scaling",
+                "data": {
+                  "type": "scaled",
+                  "components": [
+                    {
+                      "value": 15.0,
+                      "unit": "percent",
+                      "of": "Intelligence"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "Slow",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    0.0,
+                    20.0,
+                    20.0,
+                    20.0,
+                    20.0,
+                    20.0
+                  ],
+                  "unit": "percent"
+                }
+              },
+              {
+                "name": "Slow Duration",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    0.0,
+                    2.0,
+                    2.0,
+                    2.0,
+                    2.0,
+                    2.0
+                  ],
+                  "unit": "seconds"
+                }
+              },
+              {
+                "name": "Radius",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    4.0
+                  ],
+                  "unit": "meters"
+                }
+              },
+              {
+                "name": "Cooldown",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    40.0,
+                    40.0,
+                    35.0,
+                    30.0,
+                    25.0,
+                    20.0
+                  ],
+                  "unit": "seconds"
+                }
+              },
+              {
+                "name": "Cost",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    40.0,
+                    40.0,
+                    50.0,
+                    60.0,
+                    70.0,
+                    80.0
+                  ],
+                  "unit": "mana"
+                }
+              }
+            ],
+            "notes": [
+              "After the explosion reaches its apex, it collapses in on itself dealing Magical Damage again",
+              "During the explosion time, you can choose which stance to enter into next"
+            ]
+          }
+        ]
+      },
+      "base": {
+        "basic_attack": [
+          {
+            "name": "Merlin Basic Attack",
+            "variant": null,
+            "tags": [],
+            "description": "Fire a projectile that deals Magical Damage to the first enemy hit",
+            "stats": [
+              {
+                "name": "Damage Scaling",
+                "data": {
+                  "type": "scaled",
+                  "components": [
+                    {
+                      "value": 100.0,
+                      "unit": "percent",
+                      "of": "Strength"
+                    },
+                    {
+                      "value": 20.0,
+                      "unit": "percent",
+                      "of": "Intelligence"
+                    },
+                    {
+                      "value": 100.0,
+                      "unit": "percent",
+                      "of": "Attack Damage"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "Range",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    8.8
+                  ],
+                  "unit": "meters"
+                }
+              },
+              {
+                "name": "Radius",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    0.48
+                  ],
+                  "unit": "meters"
+                }
+              }
+            ],
+            "notes": [
+              "Projectile stops on first target hit, and does not pass through walls"
+            ]
+          }
+        ],
+        "passive": [
+          {
+            "name": "Overload",
+            "variant": null,
+            "tags": [
+              "Enhanced Attacks After Ability"
+            ],
+            "description": "Using an ability provides 1 stack of Overload. Firing a Attack consumes 1 stack of Overload and deals Magical Damage to enemies hit",
+            "stats": [
+              {
+                "name": "Damage",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    20.0
+                  ],
+                  "unit": "flat"
+                }
+              },
+              {
+                "name": "Damage Scaling",
+                "data": {
+                  "type": "scaled",
+                  "components": [
+                    {
+                      "value": 20.0,
+                      "unit": "percent",
+                      "of": "Intelligence"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "Max Stacks",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    3.0
+                  ],
+                  "unit": "flat"
+                }
+              },
+              {
+                "name": "Buff Duration",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    5.0
+                  ],
+                  "unit": "seconds"
+                }
+              }
+            ],
+            "notes": [
+              "The damage from this ability can trigger Ability Item effects"
+            ]
+          }
+        ],
+        "first": [],
+        "second": [],
+        "third": [],
+        "ultimate": []
+      }
+    }
+  },
+  "aspect": {
+    "name": "Aspect of Pandemonium",
+    "description": "Elemental Mastery has a reduced cooldown and each time it is used, a random Stance is selected with 2 random primary abilities, Flicker will always persist. Using Elemental Mastery provides an Intelligence buff for a short duration.",
+    "modifies": {
+      "basic_attack": [],
+      "passive": [],
+      "first": [],
+      "second": [],
+      "third": [],
+      "ultimate": [
+        {
+          "name": "Elemental Mastery",
+          "variant": "",
+          "tags": [
+            "Radiate Damage",
+            "Random Abilities"
+          ],
+          "description": "Tap into your inner potential, exploding with energy in your current stance dealing Magical Damage to enemies hit",
+          "stats": [
+            {
+              "name": "Damage",
+              "data": {
+                "type": "tiered",
+                "values": [
+                  0.0,
+                  80.0,
+                  110.0,
+                  140.0,
+                  170.0,
+                  210.0
+                ],
+                "unit": "flat"
+              }
+            },
+            {
+              "name": "Damage Scaling",
+              "data": {
+                "type": "scaled",
+                "components": [
+                  {
+                    "value": 15.0,
+                    "unit": "percent",
+                    "of": "Intelligence"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Intelligence",
+              "data": {
+                "type": "tiered",
+                "values": [
+                  10.0
+                ],
+                "unit": "flat"
+              }
+            },
+            {
+              "name": "Intelligence Scaling",
+              "data": {
+                "type": "scaled",
+                "components": [
+                  {
+                    "value": 0.5,
+                    "unit": "flat",
+                    "of": "Level"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Buff Duration",
+              "data": {
+                "type": "tiered",
+                "values": [
+                  10.0
+                ],
+                "unit": "seconds"
+              }
+            },
+            {
+              "name": "Slow",
+              "data": {
+                "type": "tiered",
+                "values": [
+                  0.0,
+                  20.0,
+                  20.0,
+                  20.0,
+                  20.0,
+                  20.0
+                ],
+                "unit": "percent"
+              }
+            },
+            {
+              "name": "Slow Duration",
+              "data": {
+                "type": "tiered",
+                "values": [
+                  0.0,
+                  2.0,
+                  2.0,
+                  2.0,
+                  2.0,
+                  2.0
+                ],
+                "unit": "seconds"
+              }
+            },
+            {
+              "name": "Radius",
+              "data": {
+                "type": "tiered",
+                "values": [
+                  4.0
+                ],
+                "unit": "meters"
+              }
+            },
+            {
+              "name": "Cooldown",
+              "data": {
+                "type": "tiered",
+                "values": [
+                  20.0
+                ],
+                "unit": "seconds"
+              }
+            },
+            {
+              "name": "Cost",
+              "data": {
+                "type": "tiered",
+                "values": [
+                  40.0,
+                  40.0,
+                  50.0,
+                  60.0,
+                  70.0,
+                  80.0
+                ],
+                "unit": "mana"
+              }
+            }
+          ],
+          "notes": [
+            "On use, a random Stance is selected with 2 random primary abilities and you gain Intelligence for a short duration",
+            "After the explosion reaches its apex, it collapses in on itself dealing Magical Damage",
+            "Enemies suffer different effects depending on which stance's energy they are being hit by",
+            "Flicker will always remain, however, the effect it provides will be tied to the new Stance entered",
+            "Arcane: Enemies hit are Knocked Up",
+            "Fire: Enemies hit are afflicted by Radiate's Burn",
+            "Ice: Enemies hit are Slowed",
+            "Ability ranks are based off the ability's original ability group. Using a starting ability bar of a rank 3 Eclipse and a rank 1 Dragonfire as an example, generating Frostbolt and Radiate will give Merlin two rank 3 abilities, and then rerolling again and getting Vortex and Blizzard will give Merlin two rank 1 abilities."
+          ]
+        }
+      ]
+    }
+  }
+}

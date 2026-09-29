@@ -1,16 +1,18 @@
 package io.github.jenboc.smite_build_api.model;
 
-import java.lang.String;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.Getter;
 
+@NoArgsConstructor
 @AllArgsConstructor
 public class Ability {
-    private @Getter String name;
-    private @Getter String variant;
-    private @Getter List<String> tags;
-    private @Getter String description;
-    private @Getter List<AbilityStat> stats;
-    private @Getter List<String> notes;
+    private @Getter @Setter String name;
+    private @Getter @Setter String variant;
+    private @Getter @Setter List<String> tags;
+    private @Getter @Setter String description;
+    private @Getter @Setter List<AbilityStat> stats;
+    private @Getter @Setter List<String> notes;
 }

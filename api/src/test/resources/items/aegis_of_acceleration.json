@@ -1,0 +1,11 @@
+{
+  "name": "Aegis of Acceleration",
+  "tier": null,
+  "category": "Relic",
+  "cost": 0.0,
+  "total_cost": 0.0,
+  "stats": {},
+  "passive_effect": null,
+  "active_effect": "On Use: Become Immune (to damage and healing for 1.5s. Can only Move On god Damage prevented: +7% Movement Speed for 6s (Max 3x) Cooldown: 140s",
+  "notes": []
+}

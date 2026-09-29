@@ -1,12 +1,13 @@
 package io.github.jenboc.smite_build_api.model;
 
-import java.lang.String;
+import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import lombok.Setter;
 import lombok.Getter;
 
+@NoArgsConstructor
 @AllArgsConstructor
 public class ScaledComponent {
-    private @Getter float value;
-    private @Getter String unit;
-    private @Getter String of;
+    private @Getter @Setter ValueUnit valueUnit;
+    private @Getter @Setter String of;
 }

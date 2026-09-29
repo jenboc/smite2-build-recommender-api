@@ -1,0 +1,22 @@
+{
+  "name": "Gauntlet of Thebes",
+  "tier": 3,
+  "category": "Defensive",
+  "cost": 1400.0,
+  "total_cost": 2200.0,
+  "stats": {
+    "max_health": {
+      "value": 200.0,
+      "unit": "flat"
+    },
+    "max_mana": {
+      "value": 150.0,
+      "unit": "flat"
+    }
+  },
+  "passive_effect": "Assist a Minion: +1 Stack. God Kill or Assist: +5 Stacks. Stacks grant +15 Max Health (max 40 Stacks). At 40 Stacks, Item evolves and gains:  +100 Max Health +10 Physical and Magical Protection",
+  "active_effect": null,
+  "notes": [
+    "At max stats, this Item provides: 200(Base)+600(Stacks)+100(Evolved)=900 Max Health"
+  ]
+}
