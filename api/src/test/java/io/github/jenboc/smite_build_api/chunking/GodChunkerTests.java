@@ -9,10 +9,18 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
+import io.github.jenboc.smite_build_api.model.Abilities;
+import io.github.jenboc.smite_build_api.model.Ability;
+import io.github.jenboc.smite_build_api.model.AbilitySet;
+import io.github.jenboc.smite_build_api.model.AbilityStat;
 import io.github.jenboc.smite_build_api.model.Aspect;
 import io.github.jenboc.smite_build_api.model.God;
 import io.github.jenboc.smite_build_api.model.GodBaseStat;
 import io.github.jenboc.smite_build_api.model.GodStatType;
+import io.github.jenboc.smite_build_api.model.ScaledComponent;
+import io.github.jenboc.smite_build_api.model.ScaledStatData;
+import io.github.jenboc.smite_build_api.model.TextStatData;
+import io.github.jenboc.smite_build_api.model.TieredStatData;
 import io.github.jenboc.smite_build_api.model.ValueUnit;
 
 class GodChunkerTests {
@@ -42,13 +50,69 @@ class GodChunkerTests {
             "Elemental Mastery has a reduced cooldown",
             Map.of()
         ));
-        god.setAbilities(null);
+        god.setAbilities(new Abilities(Map.of(
+            "Base", new AbilitySet(
+                        // Basic Attack
+                        List.of(
+                            new Ability(
+                                "Ability Name",
+                                null,
+                                List.of("Tag 1", "Tag 2"),
+                                "Ability Description",
+                                List.of(
+                                    new AbilityStat(
+                                        "Damage Scaling",
+                                        new ScaledStatData(List.of(
+                                            new ScaledComponent(
+                                                new ValueUnit(50.0, ValueUnit.Unit.PERCENT),
+                                                "Intelligence"
+                                            ),
+                                            new ScaledComponent(
+                                                new ValueUnit(25.0, ValueUnit.Unit.PERCENT),
+                                                "Strength"
+                                            )
+                                        ))
+                                    ),
+                                    new AbilityStat(
+                                        "Damage",
+                                        new TieredStatData(
+                                            List.of(10.0, 20.0, 30.0, 40.0),
+                                            "flat"
+                                        )
+                                    ),
+                                    new AbilityStat(
+                                        "Text Stat",
+                                        new TextStatData("Text Stat Data")
+                                    )
+                                ),
+                                List.of(
+                                    "Ability Note 1.",
+                                    "Ability Note 2."
+                                )
+                            )
+                        ),
+                        // Passive
+                        List.of(),
+                        // First Ability
+                        List.of(),
+                        // Second Ability
+                        List.of(),
+                        // Third Ability
+                        List.of(),
+                        // Ultimate
+                        List.of()
+                    )
+        )));
 
         return god;
     }
 
     private Chunk overviewChunk(God god) {
         return chunker.chunk(god).get(0);
+    }
+
+    private Chunk abilityChunk(God god) {
+        return chunker.chunk(god).get(1);
     }
 
     @Test
@@ -124,6 +188,136 @@ class GodChunkerTests {
         assertEquals("Mid", meta.get("roles"));
         assertEquals("Magical", meta.get("damage_type"));
         assertEquals("Ranged", meta.get("damage_range"));
+    }
+
+    @Test
+    void abilityChunkHeaderContainsGodSlotAndAbilityNames() {
+        // Take Stance and Variant to be base/null (as it starts)
+        String text = abilityChunk(fullGod()).text();
+
+        assertTrue(text.startsWith("Merlin, Basic Attack - Ability Name"),
+                "got: " + text);
+    }
+
+    @Test
+    void abilityChunkHeaderContainsStanceIfNotBase() {
+        // Take Variant to be null but Stance to be non-null and non-base
+        God god = fullGod();
+        god.getAbilities().setStances(Map.of(
+            "Fire", god.getAbilities().getStances().get("Base")
+        ));
+
+        String text = abilityChunk(god).text();
+
+        assertTrue(text.startsWith("Merlin, Fire Stance, Basic Attack - Ability Name"),
+                "got: " + text);
+    }
+
+    @Test
+    void abilityChunkHeaderContainsVariantIfNotNull() {
+        // Take Variant to be non-null but Stance to be base
+        God god = fullGod();
+        god.getAbilities().getStances().get("Base").getBasicAttack().get(0)
+            .setVariant("Ability Variant");
+
+        String text = abilityChunk(god).text();
+
+        assertTrue(text.startsWith("Merlin, Basic Attack - Ability Name (Ability Variant)"),
+                "got: " + text);
+    }
+
+    @Test
+    void abilityChunkHeaderContainsStanceAndVariantIfBothPresent() {
+        // Both Variant and Stance are non-null and non-base
+        God god = fullGod();
+        god.getAbilities().getStances().get("Base").getBasicAttack().get(0)
+            .setVariant("Ability Variant");
+        god.getAbilities().setStances(Map.of(
+            "Fire", god.getAbilities().getStances().get("Base")
+        ));
+
+        String text = abilityChunk(god).text();
+        assertTrue(text.startsWith("Merlin, Fire Stance, Basic Attack - Ability Name (Ability Variant)"),
+                "got: " + text);
+
+    }
+
+    @Test
+    void abilityChunkContainsTagsIfPresentIfPresent() {
+        String text = abilityChunk(fullGod()).text();
+        assertTrue(text.contains("Tags: Tag 1, Tag 2"),
+                "got: " + text);
+    }
+
+    @Test
+    void abilityChunkOmitsTagsIfNotPresentIfPresent() {
+        God god = fullGod();
+        god.getAbilities().getStances().get("Base").getBasicAttack().get(0)
+            .setTags(List.of());
+
+        String text = abilityChunk(god).text();
+        assertFalse(text.contains("Tags:"), "got: " + text);
+
+        god.getAbilities().getStances().get("Base").getBasicAttack().get(0)
+            .setTags(null);
+        
+        text = abilityChunk(god).text();
+        assertFalse(text.contains("Tags:"), "got: " + text);
+    }
+
+    @Test
+    void abilityChunkContainsTieredStatDataIfPresent() {
+        String text = abilityChunk(fullGod()).text();
+        assertTrue(text.contains("Damage: 10 | 20 | 30 | 40"),
+                "got: " + text);
+    }
+
+    @Test
+    void abilityChunkContainsScaledStatDataIfPresent() {
+        String text = abilityChunk(fullGod()).text();
+        assertTrue(text.contains("Damage Scaling: 50% Intelligence + 25% Strength"),
+                "got: " + text);
+    }
+
+    @Test
+    void abilityChunkContainsTextStatDataIfPresent() {
+        String text = abilityChunk(fullGod()).text();
+        assertTrue(text.contains("Text Stat: Text Stat Data"),
+                "got: " + text);
+    }
+
+    @Test
+    void abilityChunkContainsNotesIfPresent() {
+        String text = abilityChunk(fullGod()).text();
+        assertTrue(text.contains("Notes: Ability Note 1. Ability Note 2."),
+                "got: " + text);
+    }
+
+    @Test
+    void abilityChunkOmitsNotesIfNotPresent() {
+        God god = fullGod();
+        god.getAbilities().getStances().get("Base").getBasicAttack().get(0)
+            .setNotes(List.of());
+
+        String text = abilityChunk(god).text();
+        assertFalse(text.contains("Notes:"), "got: " + text);
+
+        god.getAbilities().getStances().get("Base").getBasicAttack().get(0)
+            .setNotes(null);
+        
+        text = abilityChunk(god).text();
+        assertFalse(text.contains("Notes:"), "got: " + text);
+    }
+
+    @Test
+    void abilityChunkMetadataContainsTypeNameGodStanceVariantAndSlot() {
+        Map<String, String> meta = abilityChunk(fullGod()).metadata();
+
+        assertEquals("ability", meta.get("type"));
+        assertEquals("Merlin", meta.get("god"));
+        assertEquals("Ability Name", meta.get("name"));
+        assertEquals("Base", meta.get("stance"));
+        assertEquals("Base", meta.get("variant"));
     }
 
     @Test 
