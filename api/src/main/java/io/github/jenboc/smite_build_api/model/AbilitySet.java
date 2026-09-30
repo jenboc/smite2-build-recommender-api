@@ -14,8 +14,8 @@ import lombok.Setter;
 public class AbilitySet {
     private @Getter @Setter List<Ability> basicAttack;
     private @Getter @Setter List<Ability> passive;
-    private @Getter @Setter @JsonProperty("1") List<Ability> first;
-    private @Getter @Setter @JsonProperty("2") List<Ability> second;
-    private @Getter @Setter @JsonProperty("3") List<Ability> third;
+    private @Getter @Setter List<Ability> first;
+    private @Getter @Setter List<Ability> second;
+    private @Getter @Setter List<Ability> third;
     private @Getter @Setter List<Ability> ultimate;
 }

@@ -103,7 +103,7 @@
   },
   "abilities": {
     "stances": {
-      "Arcane": {
+      "arcane": {
         "basic_attack": [],
         "passive": [],
         "first": [
@@ -135,8 +135,10 @@
                   "type": "scaled",
                   "components": [
                     {
-                      "value": 55.0,
-                      "unit": "percent",
+                      "value_unit": {
+                        "value": 55.0,
+                        "unit": "percent"
+                      },
                       "of": "Intelligence"
                     }
                   ]
@@ -162,8 +164,10 @@
                   "type": "scaled",
                   "components": [
                     {
-                      "value": 10.0,
-                      "unit": "percent",
+                      "value_unit": {
+                        "value": 10.0,
+                        "unit": "percent"
+                      },
                       "of": "Intelligence"
                     }
                   ]
@@ -265,8 +269,10 @@
                   "type": "scaled",
                   "components": [
                     {
-                      "value": 70.0,
-                      "unit": "percent",
+                      "value_unit": {
+                        "value": 70.0,
+                        "unit": "percent"
+                      },
                       "of": "Intelligence"
                     }
                   ]
@@ -339,8 +345,10 @@
                   "type": "scaled",
                   "components": [
                     {
-                      "value": 22.5,
-                      "unit": "percent",
+                      "value_unit": {
+                        "value": 22.5,
+                        "unit": "percent"
+                      },
                       "of": "Recent Damage Taken"
                     }
                   ]
@@ -417,8 +425,10 @@
                   "type": "scaled",
                   "components": [
                     {
-                      "value": 15.0,
-                      "unit": "percent",
+                      "value_unit": {
+                        "value": 15.0,
+                        "unit": "percent"
+                      },
                       "of": "Intelligence"
                     }
                   ]
@@ -472,7 +482,7 @@
           }
         ]
       },
-      "Fire": {
+      "fire": {
         "basic_attack": [],
         "passive": [],
         "first": [
@@ -504,8 +514,10 @@
                   "type": "scaled",
                   "components": [
                     {
-                      "value": 20.0,
-                      "unit": "percent",
+                      "value_unit": {
+                        "value": 20.0,
+                        "unit": "percent"
+                      },
                       "of": "Intelligence"
                     }
                   ]
@@ -531,8 +543,10 @@
                   "type": "scaled",
                   "components": [
                     {
-                      "value": 5.0,
-                      "unit": "percent",
+                      "value_unit": {
+                        "value": 5.0,
+                        "unit": "percent"
+                      },
                       "of": "Intelligence"
                     }
                   ]
@@ -622,8 +636,10 @@
                   "type": "scaled",
                   "components": [
                     {
-                      "value": 20.0,
-                      "unit": "percent",
+                      "value_unit": {
+                        "value": 20.0,
+                        "unit": "percent"
+                      },
                       "of": "Intelligence"
                     }
                   ]
@@ -635,8 +651,10 @@
                   "type": "scaled",
                   "components": [
                     {
-                      "value": 4.0,
-                      "unit": "percent",
+                      "value_unit": {
+                        "value": 4.0,
+                        "unit": "percent"
+                      },
                       "of": "Stack"
                     }
                   ]
@@ -793,8 +811,10 @@
                   "type": "scaled",
                   "components": [
                     {
-                      "value": 15.0,
-                      "unit": "percent",
+                      "value_unit": {
+                        "value": 15.0,
+                        "unit": "percent"
+                      },
                       "of": "Intelligence"
                     }
                   ]
@@ -848,7 +868,7 @@
           }
         ]
       },
-      "Ice": {
+      "ice": {
         "basic_attack": [],
         "passive": [],
         "first": [
@@ -880,8 +900,10 @@
                   "type": "scaled",
                   "components": [
                     {
-                      "value": 55.0,
-                      "unit": "percent",
+                      "value_unit": {
+                        "value": 55.0,
+                        "unit": "percent"
+                      },
                       "of": "Intelligence"
                     }
                   ]
@@ -973,8 +995,10 @@
                   "type": "scaled",
                   "components": [
                     {
-                      "value": 15.0,
-                      "unit": "percent",
+                      "value_unit": {
+                        "value": 15.0,
+                        "unit": "percent"
+                      },
                       "of": "Intelligence"
                     }
                   ]
@@ -986,8 +1010,10 @@
                   "type": "scaled",
                   "components": [
                     {
-                      "value": 8.0,
-                      "unit": "percent",
+                      "value_unit": {
+                        "value": 8.0,
+                        "unit": "percent"
+                      },
                       "of": "Stack"
                     }
                   ]
@@ -1151,8 +1177,10 @@
                   "type": "scaled",
                   "components": [
                     {
-                      "value": 15.0,
-                      "unit": "percent",
+                      "value_unit": {
+                        "value": 15.0,
+                        "unit": "percent"
+                      },
                       "of": "Intelligence"
                     }
                   ]
@@ -1250,18 +1278,24 @@
                   "type": "scaled",
                   "components": [
                     {
-                      "value": 100.0,
-                      "unit": "percent",
+                      "value_unit": {
+                        "value": 100.0,
+                        "unit": "percent"
+                      },
                       "of": "Strength"
                     },
                     {
-                      "value": 20.0,
-                      "unit": "percent",
+                      "value_unit": {
+                        "value": 20.0,
+                        "unit": "percent"
+                      },
                       "of": "Intelligence"
                     },
                     {
-                      "value": 100.0,
-                      "unit": "percent",
+                      "value_unit": {
+                        "value": 100.0,
+                        "unit": "percent"
+                      },
                       "of": "Attack Damage"
                     }
                   ]
@@ -1318,8 +1352,10 @@
                   "type": "scaled",
                   "components": [
                     {
-                      "value": 20.0,
-                      "unit": "percent",
+                      "value_unit": {
+                        "value": 20.0,
+                        "unit": "percent"
+                      },
                       "of": "Intelligence"
                     }
                   ]
@@ -1362,160 +1398,166 @@
     "name": "Aspect of Pandemonium",
     "description": "Elemental Mastery has a reduced cooldown and each time it is used, a random Stance is selected with 2 random primary abilities, Flicker will always persist. Using Elemental Mastery provides an Intelligence buff for a short duration.",
     "modifies": {
-      "basic_attack": [],
-      "passive": [],
-      "first": [],
-      "second": [],
-      "third": [],
-      "ultimate": [
-        {
-          "name": "Elemental Mastery",
-          "variant": "",
-          "tags": [
-            "Radiate Damage",
-            "Random Abilities"
-          ],
-          "description": "Tap into your inner potential, exploding with energy in your current stance dealing Magical Damage to enemies hit",
-          "stats": [
-            {
-              "name": "Damage",
-              "data": {
-                "type": "tiered",
-                "values": [
-                  0.0,
-                  80.0,
-                  110.0,
-                  140.0,
-                  170.0,
-                  210.0
-                ],
-                "unit": "flat"
+      "base": {
+        "basic_attack": [],
+        "passive": [],
+        "first": [],
+        "second": [],
+        "third": [],
+        "ultimate": [
+          {
+            "name": "Elemental Mastery",
+            "variant": "",
+            "tags": [
+              "Radiate Damage",
+              "Random Abilities"
+            ],
+            "description": "Tap into your inner potential, exploding with energy in your current stance dealing Magical Damage to enemies hit",
+            "stats": [
+              {
+                "name": "Damage",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    0.0,
+                    80.0,
+                    110.0,
+                    140.0,
+                    170.0,
+                    210.0
+                  ],
+                  "unit": "flat"
+                }
+              },
+              {
+                "name": "Damage Scaling",
+                "data": {
+                  "type": "scaled",
+                  "components": [
+                    {
+                      "value_unit": {
+                        "value": 15.0,
+                        "unit": "percent"
+                      },
+                      "of": "Intelligence"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "Intelligence",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    10.0
+                  ],
+                  "unit": "flat"
+                }
+              },
+              {
+                "name": "Intelligence Scaling",
+                "data": {
+                  "type": "scaled",
+                  "components": [
+                    {
+                      "value_unit": {
+                        "value": 0.5,
+                        "unit": "flat"
+                      },
+                      "of": "Level"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "Buff Duration",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    10.0
+                  ],
+                  "unit": "seconds"
+                }
+              },
+              {
+                "name": "Slow",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    0.0,
+                    20.0,
+                    20.0,
+                    20.0,
+                    20.0,
+                    20.0
+                  ],
+                  "unit": "percent"
+                }
+              },
+              {
+                "name": "Slow Duration",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    0.0,
+                    2.0,
+                    2.0,
+                    2.0,
+                    2.0,
+                    2.0
+                  ],
+                  "unit": "seconds"
+                }
+              },
+              {
+                "name": "Radius",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    4.0
+                  ],
+                  "unit": "meters"
+                }
+              },
+              {
+                "name": "Cooldown",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    20.0
+                  ],
+                  "unit": "seconds"
+                }
+              },
+              {
+                "name": "Cost",
+                "data": {
+                  "type": "tiered",
+                  "values": [
+                    40.0,
+                    40.0,
+                    50.0,
+                    60.0,
+                    70.0,
+                    80.0
+                  ],
+                  "unit": "mana"
+                }
               }
-            },
-            {
-              "name": "Damage Scaling",
-              "data": {
-                "type": "scaled",
-                "components": [
-                  {
-                    "value": 15.0,
-                    "unit": "percent",
-                    "of": "Intelligence"
-                  }
-                ]
-              }
-            },
-            {
-              "name": "Intelligence",
-              "data": {
-                "type": "tiered",
-                "values": [
-                  10.0
-                ],
-                "unit": "flat"
-              }
-            },
-            {
-              "name": "Intelligence Scaling",
-              "data": {
-                "type": "scaled",
-                "components": [
-                  {
-                    "value": 0.5,
-                    "unit": "flat",
-                    "of": "Level"
-                  }
-                ]
-              }
-            },
-            {
-              "name": "Buff Duration",
-              "data": {
-                "type": "tiered",
-                "values": [
-                  10.0
-                ],
-                "unit": "seconds"
-              }
-            },
-            {
-              "name": "Slow",
-              "data": {
-                "type": "tiered",
-                "values": [
-                  0.0,
-                  20.0,
-                  20.0,
-                  20.0,
-                  20.0,
-                  20.0
-                ],
-                "unit": "percent"
-              }
-            },
-            {
-              "name": "Slow Duration",
-              "data": {
-                "type": "tiered",
-                "values": [
-                  0.0,
-                  2.0,
-                  2.0,
-                  2.0,
-                  2.0,
-                  2.0
-                ],
-                "unit": "seconds"
-              }
-            },
-            {
-              "name": "Radius",
-              "data": {
-                "type": "tiered",
-                "values": [
-                  4.0
-                ],
-                "unit": "meters"
-              }
-            },
-            {
-              "name": "Cooldown",
-              "data": {
-                "type": "tiered",
-                "values": [
-                  20.0
-                ],
-                "unit": "seconds"
-              }
-            },
-            {
-              "name": "Cost",
-              "data": {
-                "type": "tiered",
-                "values": [
-                  40.0,
-                  40.0,
-                  50.0,
-                  60.0,
-                  70.0,
-                  80.0
-                ],
-                "unit": "mana"
-              }
-            }
-          ],
-          "notes": [
-            "On use, a random Stance is selected with 2 random primary abilities and you gain Intelligence for a short duration",
-            "After the explosion reaches its apex, it collapses in on itself dealing Magical Damage",
-            "Enemies suffer different effects depending on which stance's energy they are being hit by",
-            "Flicker will always remain, however, the effect it provides will be tied to the new Stance entered",
-            "Arcane: Enemies hit are Knocked Up",
-            "Fire: Enemies hit are afflicted by Radiate's Burn",
-            "Ice: Enemies hit are Slowed",
-            "Ability ranks are based off the ability's original ability group. Using a starting ability bar of a rank 3 Eclipse and a rank 1 Dragonfire as an example, generating Frostbolt and Radiate will give Merlin two rank 3 abilities, and then rerolling again and getting Vortex and Blizzard will give Merlin two rank 1 abilities."
-          ]
-        }
-      ]
+            ],
+            "notes": [
+              "On use, a random Stance is selected with 2 random primary abilities and you gain Intelligence for a short duration",
+              "After the explosion reaches its apex, it collapses in on itself dealing Magical Damage",
+              "Enemies suffer different effects depending on which stance's energy they are being hit by",
+              "Flicker will always remain, however, the effect it provides will be tied to the new Stance entered",
+              "Arcane: Enemies hit are Knocked Up",
+              "Fire: Enemies hit are afflicted by Radiate's Burn",
+              "Ice: Enemies hit are Slowed",
+              "Ability ranks are based off the ability's original ability group. Using a starting ability bar of a rank 3 Eclipse and a rank 1 Dragonfire as an example, generating Frostbolt and Radiate will give Merlin two rank 3 abilities, and then rerolling again and getting Vortex and Blizzard will give Merlin two rank 1 abilities."
+            ]
+          }
+        ]
+      }
     }
   }
 }

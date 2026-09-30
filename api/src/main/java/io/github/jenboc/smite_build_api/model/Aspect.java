@@ -1,5 +1,7 @@
 package io.github.jenboc.smite_build_api.model;
 
+import java.util.Map;
+
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,5 +12,5 @@ import lombok.Getter;
 public class Aspect {
     private @Getter @Setter String name;
     private @Getter @Setter String description;
-    private @Getter @Setter AbilitySet modifies;
+    private @Getter @Setter Map<String, AbilitySet> modifies;
 }
