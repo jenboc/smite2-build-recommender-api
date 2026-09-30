@@ -1,6 +1,7 @@
 package io.github.jenboc.smite_build_api.chunking;
 
 import java.util.Map;
+import java.util.List;
 
 import org.springframework.stereotype.Component;
 
@@ -8,9 +9,15 @@ import io.github.jenboc.smite_build_api.model.Item;
 
 @Component
 public class ItemChunker extends Chunker<Item> {
-    
+   
     @Override
-    protected String buildChunkText(Item item) {
+    public List<Chunk> chunk(Item obj) {
+        return List.of(
+            new Chunk(buildChunkText(obj), buildMetadata(obj))
+        );
+    }
+
+    private String buildChunkText(Item item) {
         StringBuilder sb = new StringBuilder();
 
         sb.append(formatHeader(item)).append("\n");
@@ -24,17 +31,16 @@ public class ItemChunker extends Chunker<Item> {
         return sb.toString().strip();
     }
 
-    @Override
-    protected Map<String, String> buildMetadata(Item item) {
+    private Map<String, String> buildMetadata(Item item) {
         return Map.of(
             "type", "item",
             "name", item.getName(),
-            "category", readableCategoryName(item.getCategory())
+            "category", readableEnumName(item.getCategory())
         );
     }
 
     private String formatHeader(Item item) {
-        String categoryName = readableCategoryName(item.getCategory());
+        String categoryName = readableEnumName(item.getCategory());
         String bracket = (item.getTier() != null)
             ? "Tier " + item.getTier() + " " + categoryName
             : categoryName;
@@ -47,18 +53,5 @@ public class ItemChunker extends Chunker<Item> {
         String total = formatNumber(item.getTotalCost());
 
         return cost + " (" + total + " total)";
-    }
-
-    private String readableCategoryName(Item.Category category) {
-        // e.g. RELIC -> Relic
-        // Unlike GodStatType, there are no spaces here.
-        String name = category.toString();
-        StringBuilder result = new StringBuilder();
-
-        result
-            .append(name.charAt(0))
-            .append(name.substring(1).toLowerCase());
-
-        return result.toString();
     }
 }

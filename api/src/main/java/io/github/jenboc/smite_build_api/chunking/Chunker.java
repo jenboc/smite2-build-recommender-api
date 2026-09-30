@@ -9,17 +9,12 @@ import io.github.jenboc.smite_build_api.model.ValueUnit;
 
 
 /*
- * Class which takes an object of type T and turns it into a chunk
+ * Class which takes an object of type T and turns it into chunks
  * for embedding
  */
 public abstract class Chunker<T> {
 
-    public Chunk chunk(T obj) {
-        return new Chunk(buildChunkText(obj), buildMetadata(obj));
-    }
-
-    protected abstract String buildChunkText(T obj);
-    protected abstract Map<String, String> buildMetadata(T obj);
+    public abstract List<Chunk> chunk(T obj);
 
     protected String formatStats(Map<GodStatType, ValueUnit> stats) {
         if (stats == null || stats.isEmpty()) return null;
@@ -27,7 +22,7 @@ public abstract class Chunker<T> {
         List<String> parts = new ArrayList<>();
 
         stats.forEach((name, vu) -> parts.add(
-            formatValueUnit(vu) + " " + readableStatName(name)
+            formatValueUnit(vu) + " " + readableEnumName(name)
         ));
 
         return String.join(", ", parts);
@@ -52,7 +47,7 @@ public abstract class Chunker<T> {
             : value;
     }
 
-    protected String readableStatName(GodStatType key) {
+    protected String readableEnumName(Enum<?> key) {
         // e.g. MAX_HEALTH -> Max Health
         String name = key.toString();
 

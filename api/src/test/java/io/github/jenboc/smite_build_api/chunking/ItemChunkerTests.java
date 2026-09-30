@@ -40,9 +40,20 @@ class ItemChunkerTests {
         return item;
     }
 
+    private Chunk getItemChunk(Item item) {
+        return chunker.chunk(item).get(0);
+    }
+
+    @Test
+    void chunkerReturnsASingleChunk() {
+        List<Chunk> chunks = chunker.chunk(fullItem());
+        assertTrue(chunks.size() == 1,
+                "expected a single chunk, but got: " + chunks.size());
+    }
+
     @Test
     void includesTierInHeaderWhenPresent() {
-        String text = chunker.chunk(fullItem()).text();
+        String text = getItemChunk(fullItem()).text();
 
         assertTrue(text.startsWith("Gauntlet of Thebes (Tier 3 Defensive)"),
                 "expected tier in header, but got: " + text);
@@ -53,7 +64,7 @@ class ItemChunkerTests {
         Item item = fullItem();
         item.setTier(null);
 
-        String text = chunker.chunk(item).text();
+        String text = getItemChunk(item).text();
 
         assertTrue(text.startsWith("Gauntlet of Thebes (Defensive)"),
                 "expected no tier segment, but got: " + text);
@@ -62,7 +73,7 @@ class ItemChunkerTests {
 
     @Test
     void showsCostAndTotalCost() {
-        String text = chunker.chunk(fullItem()).text();
+        String text = getItemChunk(fullItem()).text();
 
         assertTrue(text.contains("Cost: 1400 (2200 total)"),
                 "expected cost and total cost, but got: " + text);
@@ -70,7 +81,7 @@ class ItemChunkerTests {
 
     @Test
     void formatsWholeNumbersWithoutDecimalPoint() {
-        String text = chunker.chunk(fullItem()).text();
+        String text = getItemChunk(fullItem()).text();
 
         assertFalse(text.contains(".0"),
                 "expected no trailing .0s on whole numbers, but got: " + text);
@@ -78,7 +89,7 @@ class ItemChunkerTests {
 
     @Test
     void includesStatsLineWhenStatsPresent() {
-        String text = chunker.chunk(fullItem()).text();
+        String text = getItemChunk(fullItem()).text();
 
         assertTrue(text.contains("Stats:"),
                 "expected stats to be included, but got: " + text);
@@ -95,10 +106,10 @@ class ItemChunkerTests {
         Item item = fullItem();
 
         item.setStats(null);
-        String nullText = chunker.chunk(item).text();
+        String nullText = getItemChunk(item).text();
 
         item.setStats(Map.of());
-        String emptyText = chunker.chunk(item).text();
+        String emptyText = getItemChunk(item).text();
 
         assertFalse(nullText.contains("Stats:"),
                 "did not expect stats to be included when null, but got: " + nullText);
@@ -109,7 +120,7 @@ class ItemChunkerTests {
 
     @Test
     void includesPassiveLineWhenPresent() {
-        String text = chunker.chunk(fullItem()).text();
+        String text = getItemChunk(fullItem()).text();
 
         assertTrue(text.contains("Passive: Assists on a minion give 1 Stack of Growth"),
                 "expected passive effect to be included, but got: " + text);
@@ -120,7 +131,7 @@ class ItemChunkerTests {
         Item item = fullItem();
         item.setPassiveEffect(null);
 
-        String text = chunker.chunk(item).text();
+        String text = getItemChunk(item).text();
 
         assertFalse(text.contains("Passive:"),
                 "did not expect an included passive effect, but got: " + text);
@@ -128,7 +139,7 @@ class ItemChunkerTests {
 
     @Test
     void includesActiveLineWhenPresent() {
-        String text = chunker.chunk(fullItem()).text();
+        String text = getItemChunk(fullItem()).text();
 
         assertTrue(text.contains("Active: Consume all stacks to heal for 10 per stack"),
                 "expected active effect to be included, but got: " + text);
@@ -139,7 +150,7 @@ class ItemChunkerTests {
         Item item = fullItem();
         item.setActiveEffect(null);
 
-        String text = chunker.chunk(item).text();
+        String text = getItemChunk(item).text();
 
         assertFalse(text.contains("Active:"),
                 "did not expect an included active effect, but got " + text);
@@ -147,7 +158,7 @@ class ItemChunkerTests {
 
     @Test
     void includesNotesLineWhenPresent() {
-        String text = chunker.chunk(fullItem()).text();
+        String text = getItemChunk(fullItem()).text();
 
         assertTrue(text.contains("Notes: At max stacks, this item provides 200 max health"),
                 "expected notes to be included, but got: " + text);
@@ -158,13 +169,13 @@ class ItemChunkerTests {
         Item item = fullItem();
 
         item.setNotes(null);
-        String text = chunker.chunk(item).text();
+        String text = getItemChunk(item).text();
 
         assertFalse(text.contains("Notes:"),
                 "did not expect notes to be included, but got: " + text);
 
         item.setNotes(List.of());
-        text = chunker.chunk(item).text();
+        text = getItemChunk(item).text();
 
         assertFalse(text.contains("Notes:"),
                 "did not expect notes to be included, but got: " + text);
@@ -172,14 +183,14 @@ class ItemChunkerTests {
 
     @Test
     void producesNoTrailingBlankLines() {
-        String text = chunker.chunk(fullItem()).text();
+        String text = getItemChunk(fullItem()).text();
 
         assertEquals(text.strip(), text);
     }
 
     @Test
     void metadataContainsTypeNameAndCategory() {
-        Chunk chunk = chunker.chunk(fullItem());
+        Chunk chunk = getItemChunk(fullItem());
 
         assertEquals("item", chunk.metadata().get("type"));
         assertEquals("Gauntlet of Thebes", chunk.metadata().get("name"));
