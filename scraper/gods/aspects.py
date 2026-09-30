@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 
-from gods.abilities import parse_ability_block, merge_slot
-from models.abilities import Aspect, AbilityOverrides
+from gods.abilities import search_for_abilities
+from models.abilities import Aspect
 
 
 def parse_aspect_info(info_table: BeautifulSoup) -> dict:
@@ -28,7 +28,7 @@ def parse_aspect_section(soup: BeautifulSoup) -> Aspect:
     # changed abilities
 
     info_table = None
-    changed_abilities = []
+    ability_block = None
 
     for sibling in aspect_div.find_next_siblings():
         classes = sibling.get("class", [])
@@ -37,22 +37,15 @@ def parse_aspect_section(soup: BeautifulSoup) -> Aspect:
         if sibling.name == "table" and "wikitable" in classes:
             info_table = sibling
         if sibling.name == "div" and "mw-customcollapsible-aspectedability" in sibling.get("id"):
-            changed_abilities = sibling.find_all("table", class_="wikitable")
+            ability_block = sibling.find("div", class_="mw-collapsible-content")
 
     if info_table is None:
-        return {}
+        return None
 
     aspect = parse_aspect_info(info_table)
 
-    if len(changed_abilities) == 0:
-        return aspect
+    if ability_block is None:
+        return Aspect.model_validate(aspect)
 
-    blocks = [parse_ability_block(block) for block in changed_abilities]
-    modifies_data = {}
-    for d in blocks:
-        for k, v in d.items():
-            merge_slot(modifies_data, k, v)
-
-    aspect["modifies"] = AbilityOverrides.model_validate(modifies_data)
-
+    aspect["modifies"] = search_for_abilities(ability_block.children)
     return Aspect.model_validate(aspect)

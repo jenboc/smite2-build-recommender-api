@@ -3,7 +3,7 @@ import re
 
 from models.stats import (TieredStat, ScaledComponent,
                           ScaledStat, TextStat, AbilityStat, ValueUnit)
-from models.abilities import Ability, Stance, Abilities
+from models.abilities import Ability, Stance, Abilities, AbilityOverrides
 
 
 TITLE_WORD_RE = re.compile(r'\b[A-Z][a-zA-Z]*\b')
@@ -156,16 +156,13 @@ def parse_stance_div(div: BeautifulSoup) -> Stance:
         for k, v in d.items():
             merge_slot(stance_data, k, v)
 
-    return {div.get("id"): Stance.model_validate(stance_data)}
+    return {div.get("id").replace("Aspect", "").lower(): Stance.model_validate(stance_data)}
 
 
-def parse_ability_section(soup: BeautifulSoup) -> Abilities:
-    heading_h2 = soup.find("h2", id="Abilities")
-    heading_div = heading_h2.find_parent("div")
-
-    ability_tables = []
+def search_for_abilities(search_space: list[BeautifulSoup]) -> dict[str, AbilityOverrides]:
     stance_divs = []
-    for sibling in heading_div.find_next_siblings():
+    ability_tables = []
+    for sibling in search_space:
         if sibling.name == "div" and "mw-heading" in sibling.get("class", []):
             break
         if sibling.name == "div" and "img-tab-wrapper" in sibling.get("class", []):
@@ -192,5 +189,17 @@ def parse_ability_section(soup: BeautifulSoup) -> Abilities:
             merge_slot(stances["base"], k, v)
 
     stances["base"] = Stance.model_validate(stances["base"])
+
+    return stances
+
+
+def parse_ability_section(soup: BeautifulSoup,
+                          has_ability_h2: bool = True) -> Abilities:
+    heading_h2 = soup.find("h2", id="Abilities")
+    heading_div = heading_h2.find_parent("div")
+    search_space = heading_div.find_next_siblings()
+
+    stances = {k: Stance.from_ability_overrides(v)
+               for k, v in search_for_abilities(search_space).items()}
 
     return Abilities(stances=stances)

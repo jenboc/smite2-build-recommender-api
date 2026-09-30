@@ -36,13 +36,16 @@ class AbilityOverrides(BaseModel):
 
 class Stance(AbilityOverrides):
     """An ability set a god can switch to mid-match"""
-    pass
-
-
-class Aspect(BaseModel):
-    name: str
-    description: str
-    modifies: AbilityOverrides = Field(default_factory=AbilityOverrides)
+    @staticmethod
+    def from_ability_overrides(obj: AbilityOverrides):
+        return Stance(
+            basic_attack=obj.basic_attack,
+            passive=obj.passive,
+            first=obj.first,
+            second=obj.second,
+            third=obj.third,
+            ultimate=obj.ultimate
+        )
 
 
 class Abilities(BaseModel):
@@ -86,3 +89,10 @@ class Abilities(BaseModel):
             )
 
         return self
+
+
+class Aspect(BaseModel):
+    name: str
+    description: str
+    # Ability overrides keyed by stance name
+    modifies: dict[str, AbilityOverrides] = Field(default_factory=dict)
