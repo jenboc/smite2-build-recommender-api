@@ -8,7 +8,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ValueUnit {
-    private @Getter @Setter float value;
+    private @Getter @Setter double value;
     private @Getter @Setter Unit unit;
 
     public enum Unit {

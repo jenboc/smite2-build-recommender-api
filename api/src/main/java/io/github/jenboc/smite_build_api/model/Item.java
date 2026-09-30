@@ -16,7 +16,7 @@ public class Item {
     private @Getter @Setter Category category;
     private @Getter @Setter double cost;
     private @Getter @Setter double totalCost;
-    private @Getter @Setter Map<String, ValueUnit> stats;
+    private @Getter @Setter Map<GodStatType, ValueUnit> stats;
     private @Getter @Setter String passiveEffect;
     private @Getter @Setter String activeEffect;
     private @Getter @Setter List<String> notes;
