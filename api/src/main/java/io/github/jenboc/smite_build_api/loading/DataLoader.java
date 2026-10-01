@@ -1,4 +1,4 @@
-package io.github.jenboc.smite_build_api.services;
+package io.github.jenboc.smite_build_api.loading;
 
 import java.nio.file.Path;
 import java.io.IOException;
@@ -9,14 +9,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import jakarta.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import tools.jackson.databind.json.JsonMapper;
 
 import io.github.jenboc.smite_build_api.model.God;
 import io.github.jenboc.smite_build_api.model.Item;
 import io.github.jenboc.smite_build_api.model.Manifest;
-import jakarta.annotation.PostConstruct;
-import tools.jackson.databind.json.JsonMapper;
+
 
 @Service 
 public class DataLoader {

@@ -1,4 +1,4 @@
-package io.github.jenboc.smite_build_api.services;
+package io.github.jenboc.smite_build_api.loading;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
