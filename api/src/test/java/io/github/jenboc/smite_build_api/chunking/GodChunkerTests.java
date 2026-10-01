@@ -107,12 +107,74 @@ class GodChunkerTests {
         return god;
     }
 
+    private God godWithAspectModifyingAbility() {
+        God god = fullGod();
+
+        Ability modifiedUltimate = new Ability(
+                "Elemental Mastery",
+                null,
+                List.of("Stance Swap"),
+                "Enhanced ultimate description",
+                List.of(
+                    new AbilityStat("Cooldown",
+                        new TieredStatData(List.of(8.0), "seconds"))
+                    ),
+                List.of("Aspect note.")
+                );
+
+        AbilitySet overrides = new AbilitySet(
+                List.of(), List.of(), List.of(), List.of(), List.of(),
+                List.of(modifiedUltimate) // only Ultimate slot populated
+                );
+
+        god.setAspect(new Aspect(
+                    "Aspect of Pandemonium",
+                    "Elemental Mastery has a reduced cooldown",
+                    Map.of("Base", overrides)
+                    ));
+
+        return god;
+    }
+
+    private God godWithAspectModifyingMultipleStances() {
+        God god = fullGod();
+
+        Ability fireFirst = new Ability("Fire 1st", null, List.of(), "desc", List.of(), List.of());
+        Ability iceFirst = new Ability("Ice 1st", null, List.of(), "desc", List.of(), List.of());
+
+        AbilitySet fireOverrides = new AbilitySet(
+                List.of(), List.of(), List.of(fireFirst), List.of(), List.of(), List.of());
+        AbilitySet iceOverrides = new AbilitySet(
+                List.of(), List.of(), List.of(iceFirst), List.of(), List.of(), List.of());
+
+        god.setAspect(new Aspect(
+                    "Aspect of the Denmother",
+                    "Full kit changes",
+                    Map.of("Fire", fireOverrides, "Ice", iceOverrides)
+                    ));
+
+        return god;
+    }
+
+    // With fullGod()'s abilities set (only Basic Attack populated in the base kit),
+    // chunk(God) produces: [0] overview, [1] basic attack ability, then aspect
+    // chunks starting at [2] -- true as long as the fixture keeps exactly one
+    // base-kit ability and exactly one aspect-modified ability.
+
     private Chunk overviewChunk(God god) {
         return chunker.chunk(god).get(0);
     }
 
     private Chunk abilityChunk(God god) {
         return chunker.chunk(god).get(1);
+    }
+
+    private Chunk aspectOverviewChunk(God god) {
+        return chunker.chunk(god).get(2);
+    }
+
+    private Chunk aspectAbilityChunk(God god) {
+        return chunker.chunk(god).get(3);
     }
 
     @Test
@@ -317,7 +379,102 @@ class GodChunkerTests {
         assertEquals("Merlin", meta.get("god"));
         assertEquals("Ability Name", meta.get("name"));
         assertEquals("Base", meta.get("stance"));
-        assertEquals("Base", meta.get("variant"));
+        assertEquals("none", meta.get("variant"));
+        assertEquals("Basic Attack", meta.get("slot"));
+    }
+
+    @Test
+    void chunkIncludesAspectChunksWhenAspectPresent() {
+        List<Chunk> chunks = chunker.chunk(godWithAspectModifyingAbility());
+        // overview + 1 base ability + aspect overview + 1 aspect-modified ability
+        assertEquals(4, chunks.size(), "got chunks: " + chunks);
+    }
+
+    @Test
+    void chunkOmitsAspectChunksWhenAspectIsNull() {
+        God god = fullGod();
+        god.setAspect(null);
+
+        List<Chunk> chunks = chunker.chunk(god);
+
+        assertEquals(2, chunks.size()); // just overview + 1 base ability
+        assertTrue(chunks.stream().noneMatch(c -> "aspect".equals(c.metadata().get("type"))));
+    }
+
+    @Test
+    void aspectOverviewContainsGodNameAndAspectName() {
+        String text = aspectOverviewChunk(godWithAspectModifyingAbility()).text();
+        assertTrue(text.startsWith("Merlin, Aspect of Pandemonium"), "got: " + text);
+    }
+
+    @Test
+    void aspectOverviewContainsDescription() {
+        String text = aspectOverviewChunk(godWithAspectModifyingAbility()).text();
+        assertTrue(text.contains("Elemental Mastery has a reduced cooldown"), "got: " + text);
+    }
+
+    @Test
+    void aspectOverviewModifiesSummaryOmitsBracketsForBaseStance() {
+        String text = aspectOverviewChunk(godWithAspectModifyingAbility()).text();
+        assertTrue(text.contains("Modifies: Ultimate Ability"), "got: " + text);
+        assertFalse(text.contains("("), "base-stance summary should have no brackets, got: " + text);
+    }
+
+    @Test
+    void aspectOverviewModifiesSummaryUsesBracketsAndSemicolonsForNamedStances() {
+        String text = aspectOverviewChunk(godWithAspectModifyingMultipleStances()).text();
+        assertTrue(
+            text.contains("Modifies: Fire Stance (First Ability); Ice Stance (First Ability)"),
+            "got: " + text
+        );
+    }
+
+    @Test
+    void aspectOverviewOmitsModifiesLineWhenEmpty() {
+        God god = fullGod(); // fullGod()'s default aspect has modifies = Map.of()
+        String text = chunker.chunk(god).get(2).text(); // only overview chunk exists at index 2 here
+        assertFalse(text.contains("Modifies:"), "got: " + text);
+    }
+
+    @Test
+    void aspectOverviewMetadataIsCorrect() {
+        Map<String, String> meta = aspectOverviewChunk(godWithAspectModifyingAbility()).metadata();
+
+        assertEquals("aspect", meta.get("type"));
+        assertEquals("Aspect of Pandemonium", meta.get("name"));
+        assertEquals("Merlin", meta.get("god"));
+    }
+
+    @Test
+    void aspectModifiedAbilityChunkHeaderIncludesAspectName() {
+        String text = aspectAbilityChunk(godWithAspectModifyingAbility()).text();
+        assertTrue(
+            text.startsWith("Merlin, Aspect of Pandemonium, Ultimate Ability - Elemental Mastery"),
+            "got: " + text
+        );
+    }
+
+    @Test
+    void aspectModifiedAbilityChunkMatchesNormalAbilityFormatting() {
+        String text = aspectAbilityChunk(godWithAspectModifyingAbility()).text();
+        assertTrue(text.contains("Cooldown: 8 seconds"), "got: " + text);
+        assertTrue(text.contains("Notes: Aspect note."), "got: " + text);
+    }
+
+    @Test
+    void aspectModifiedAbilityChunkMetadataIncludesAspectKey() {
+        Map<String, String> meta = aspectAbilityChunk(godWithAspectModifyingAbility()).metadata();
+
+        assertEquals("ability", meta.get("type"));
+        assertEquals("Merlin", meta.get("god"));
+        assertEquals("Elemental Mastery", meta.get("name"));
+        assertEquals("Aspect of Pandemonium", meta.get("aspect"));
+    }
+
+    @Test
+    void baseKitAbilityChunksHaveNoAspectMetadataKey() {
+        Map<String, String> meta = abilityChunk(fullGod()).metadata();
+        assertFalse(meta.containsKey("aspect"), "base-kit ability should not carry an aspect key");
     }
 
     @Test 

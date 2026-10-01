@@ -1,14 +1,19 @@
 package io.github.jenboc.smite_build_api.chunking;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
 import io.github.jenboc.smite_build_api.model.Ability;
+import io.github.jenboc.smite_build_api.model.AbilitySet;
 import io.github.jenboc.smite_build_api.model.AbilityStat;
+import io.github.jenboc.smite_build_api.model.Aspect;
 import io.github.jenboc.smite_build_api.model.God;
 import io.github.jenboc.smite_build_api.model.GodBaseStat;
 import io.github.jenboc.smite_build_api.model.GodStatType;
@@ -20,6 +25,15 @@ import io.github.jenboc.smite_build_api.model.God.Role;
 @Component
 public class GodChunker extends Chunker<God> {
 
+    private static final Map<String, Function<AbilitySet, List<Ability>>> SLOT_ACCESSORS = Map.of(
+        "Basic Attack", AbilitySet::getBasicAttack,
+        "Passive Ability", AbilitySet::getPassive,
+        "First Ability", AbilitySet::getFirst,
+        "Second Ability", AbilitySet::getSecond,
+        "Third Ability", AbilitySet::getThird,
+        "Ultimate Ability", AbilitySet::getUltimate
+    );
+
     @Override
     public List<Chunk> chunk(God obj) {
         String godName = obj.getName();
@@ -27,20 +41,13 @@ public class GodChunker extends Chunker<God> {
 
         chunks.add(chunkOverview(obj));
 
-        obj.getAbilities().getStances().forEach((stanceName, abilitySet) -> {
-            abilitySet.getBasicAttack()
-                .forEach(a -> chunks.add(chunkAbility(a, godName, stanceName, "Basic Attack")));
-            abilitySet.getPassive()
-                .forEach(a -> chunks.add(chunkAbility(a, godName, stanceName, "Passive Ability")));
-            abilitySet.getFirst()
-                .forEach(a -> chunks.add(chunkAbility(a, godName, stanceName, "First Ability")));
-            abilitySet.getSecond()
-                .forEach(a -> chunks.add(chunkAbility(a, godName, stanceName, "Second Ability")));
-            abilitySet.getThird()
-                .forEach(a -> chunks.add(chunkAbility(a, godName, stanceName, "Third Ability")));
-            abilitySet.getUltimate()
-                .forEach(a -> chunks.add(chunkAbility(a, godName, stanceName, "Ultimate Ability")));
-        });
+        obj.getAbilities().getStances().forEach((stanceName, abilitySet) -> 
+            forEachSlot(abilitySet, (slotName, ability) ->
+                chunks.add(chunkAbility(ability, godName, stanceName, slotName, null))));
+
+        if (obj.getAspect() != null) {
+            chunks.addAll(chunkAspect(obj.getAspect(), godName));
+        }
 
         return chunks;
     }
@@ -71,10 +78,68 @@ public class GodChunker extends Chunker<God> {
         );
     }
 
-    private Chunk chunkAbility(Ability ability, String godName, String stanceName, String slotLabel) {
+    private List<Chunk> chunkAspect(Aspect aspect, String godName) {
+        List<Chunk> chunks = new ArrayList<>();
+
+        chunks.add(chunkAspectOverview(aspect, godName));
+
+        aspect.getModifies().forEach((stanceName, overrides) ->
+            forEachSlot(overrides, (slotLabel, ability) ->
+                chunks.add(chunkAbility(ability, godName, stanceName, slotLabel, aspect.getName()))));
+
+        return chunks;
+    }
+
+    private Chunk chunkAspectOverview(Aspect aspect, String godName) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(godName).append(", ").append(aspect.getName()).append("\n");
+        sb.append(aspect.getDescription());
+        appendIfPresent(sb, "Modifies", formatAspectModSummary(aspect.getModifies()));
+
+        return new Chunk(
+            sb.toString().strip(),
+            Map.of(
+                "type", "aspect",
+                "name", aspect.getName(),
+                "god", godName
+            )
+        );
+    }
+
+    private void forEachSlot(AbilitySet set, BiConsumer<String, Ability> action) {
+        SLOT_ACCESSORS.forEach((slotLabel, accessor) -> {
+            List<Ability> abilities = accessor.apply(set);
+
+            if (abilities != null) {
+                abilities.forEach(ability -> action.accept(slotLabel, ability));
+            }
+        });
+    }
+
+    private String formatAspectModSummary(Map<String, AbilitySet> mods) {
+        if (mods == null || mods.isEmpty()) return null;
+
+        List<String> parts = new ArrayList<>();
+        mods.forEach((stanceName, overrides) -> {
+            List<String> slots = new ArrayList<>();
+            forEachSlot(overrides, (slotLabel, ability) -> slots.add(slotLabel));
+
+            String stancePrefix = "base".equalsIgnoreCase(stanceName) ? "" : stanceName + " Stance (";
+            parts.add(stancePrefix + String.join(", ", slots) + ")");
+        });
+
+        return String.join("; ", parts);
+    }
+
+    private Chunk chunkAbility(Ability ability, String godName, String stanceName, String slotLabel, String aspectName) {
         StringBuilder sb = new StringBuilder();
         
         sb.append(godName).append(", ");
+
+        if (aspectName != null && !aspectName.isEmpty()) {
+            sb.append(aspectName).append(", ");
+        }
 
         if (stanceName != null && !"base".equalsIgnoreCase(stanceName)) {
             sb.append(stanceName).append(" Stance, ");
@@ -90,19 +155,29 @@ public class GodChunker extends Chunker<God> {
         sb.append(ability.getDescription()).append("\n\n");
 
         appendIfPresent(sb, "Tags", formatAbilityTags(ability.getTags()));
-        sb.append(formatAbilityStats(ability.getStats())).append("\n");
+
+        if (ability.getStats() != null && !ability.getStats().isEmpty()) {
+            sb.append(formatAbilityStats(ability.getStats())).append("\n");
+        }
+
         appendIfPresent(sb, "Notes", formatNotes(ability.getNotes()));
+
+        Map<String, String> metadata = new HashMap<>();
+        
+        metadata.put("type", "ability");
+        metadata.put("name", ability.getName());
+        metadata.put("god", godName);
+        metadata.put("stance", stanceName == null ? "Base" : stanceName);
+        metadata.put("variant", ability.getVariant() == null ? "none" : ability.getVariant());
+        metadata.put("slot", slotLabel);
+
+        if (aspectName != null && !aspectName.isEmpty()) {
+            metadata.put("aspect", aspectName);
+        }
 
         return new Chunk(
             sb.toString().strip(),
-            Map.of(
-                "type", "ability",
-                "name", ability.getName(),
-                "god", godName,
-                "stance", stanceName == null ? "Base" : stanceName,
-                "variant", ability.getVariant() == null ? "Base" : ability.getVariant(),
-                "slot", slotLabel
-            )
+            metadata
         );
     }
 
@@ -163,7 +238,7 @@ public class GodChunker extends Chunker<God> {
         if ("flat".equalsIgnoreCase(unit))
             return joinedValues;
 
-        return joinedValues + unit;
+        return joinedValues + " " + unit;
     }
 
     private String formatScaledStatData(ScaledStatData data) {
