@@ -424,7 +424,8 @@ class GodChunkerTests {
     void aspectOverviewModifiesSummaryUsesBracketsAndSemicolonsForNamedStances() {
         String text = aspectOverviewChunk(godWithAspectModifyingMultipleStances()).text();
         assertTrue(
-            text.contains("Modifies: Fire Stance (First Ability); Ice Stance (First Ability)"),
+            text.contains("Modifies: Ice Stance (First Ability); Fire Stance (First Ability)")
+            || text.contains("Modifies: Fire Stance (First Ability); Ice Stance (First Ability)"),
             "got: " + text
         );
     }

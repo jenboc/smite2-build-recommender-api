@@ -94,7 +94,7 @@ public class GodChunker extends Chunker<God> {
         StringBuilder sb = new StringBuilder();
 
         sb.append(godName).append(", ").append(aspect.getName()).append("\n");
-        sb.append(aspect.getDescription());
+        sb.append(aspect.getDescription()).append("\n");
         appendIfPresent(sb, "Modifies", formatAspectModSummary(aspect.getModifies()));
 
         return new Chunk(
