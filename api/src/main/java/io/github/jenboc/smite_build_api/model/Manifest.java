@@ -8,6 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Represents the scraped dataset's manifest
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 public class Manifest {
@@ -18,6 +21,9 @@ public class Manifest {
     private @Getter @Setter List<Entry> items;
     private @Getter @Setter List<Entry> gods;
 
+    /**
+     * Represents a single entry in the manifest
+     */
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Entry {

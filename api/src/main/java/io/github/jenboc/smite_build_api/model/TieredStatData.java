@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Represents a "10 | 20 | 30 | 40 degrees" style string
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 public class TieredStatData extends StatData {

@@ -8,12 +8,16 @@ import io.github.jenboc.smite_build_api.model.GodStatType;
 import io.github.jenboc.smite_build_api.model.ValueUnit;
 
 
-/*
- * Class which takes an object of type T and turns it into chunks
- * for embedding
+/**
+ * Class responsible for breaking an object into chunks
+ * @see Chunk
  */
 public abstract class Chunker<T> {
 
+    /**
+     * Break an object down into chunks
+     * @see Chunk
+     */
     public abstract List<Chunk> chunk(T obj);
 
     protected String formatStats(Map<GodStatType, ValueUnit> stats) {

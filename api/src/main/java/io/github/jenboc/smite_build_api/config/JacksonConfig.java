@@ -7,6 +7,11 @@ import org.springframework.context.annotation.Configuration;
 import tools.jackson.databind.MapperFeature;
 import tools.jackson.databind.PropertyNamingStrategies;
 
+/**
+ * SpringBoot Configuration for Jackson. Accounts for the fact that
+ * the .json files use snake_case, rather than camelCase, and that
+ * our Java enums use CAPITALISED_SNAKE_CASE
+ */
 @Configuration
 public class JacksonConfig {
 

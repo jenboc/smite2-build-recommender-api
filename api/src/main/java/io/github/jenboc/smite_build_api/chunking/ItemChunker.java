@@ -7,9 +7,21 @@ import org.springframework.stereotype.Component;
 
 import io.github.jenboc.smite_build_api.model.Item;
 
+/**
+ * Breaks an item down into chunks
+ * @see Chunk
+ * @see Item
+ */
 @Component
 public class ItemChunker extends Chunker<Item> {
-   
+
+    /**
+     * Breaks down an item into chunks, including:
+     *
+     * <ul>
+     *      <li>An item overview chunk</li>
+     * </ul>
+     */
     @Override
     public List<Chunk> chunk(Item obj) {
         return List.of(

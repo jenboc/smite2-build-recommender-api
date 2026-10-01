@@ -2,13 +2,14 @@ package io.github.jenboc.smite_build_api.model;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Represents a (potentially incomplete) set of god abilities.
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 public class AbilitySet {

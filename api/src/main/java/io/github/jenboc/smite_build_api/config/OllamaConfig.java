@@ -5,6 +5,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;
 
+/**
+ * SpringBoot configuration for the RestClient used to access Ollama.
+ * Retrieves the base url from the application settings.
+ */
 @Configuration
 public class OllamaConfig {
 

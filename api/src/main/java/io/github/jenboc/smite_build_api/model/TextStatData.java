@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Represents the data of a statistic which the scraper left as raw text
+ */
 @NoArgsConstructor 
 @AllArgsConstructor
 public class TextStatData extends StatData {

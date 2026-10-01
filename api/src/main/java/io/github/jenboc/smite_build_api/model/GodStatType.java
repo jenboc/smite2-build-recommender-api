@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonAlias;
  * Note: Gods only start with a fraction of these
  */
 public enum GodStatType {
+    // Raw attack damage is also referred to as attack power
     @JsonAlias({"ATTACK_POWER"})
     ATTACK_DAMAGE,
 
@@ -30,12 +31,15 @@ public enum GodStatType {
 
     MANA_REGEN,
 
+    // Also referred to as simply "health" in the case of god base stats
     @JsonAlias({"HEALTH"})
     MAX_HEALTH,
 
+    // Also referred to as simply "mana" in the case of god base stats
     @JsonAlias({"MANA"})
     MAX_MANA,
 
+    // Also referred to as simply "move speed"
     @JsonAlias({"MOVE_SPEED"})
     MOVEMENT_SPEED,
 

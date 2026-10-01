@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.Getter;
 
+/**
+ * Represents a single god ability
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 public class Ability {

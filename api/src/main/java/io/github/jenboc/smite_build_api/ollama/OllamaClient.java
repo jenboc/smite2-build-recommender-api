@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+/**
+ * A SpringBoot service used to interact with Ollama's API
+ */
 @Service 
 public class OllamaClient {
 
@@ -23,6 +26,11 @@ public class OllamaClient {
         this.generationModel = generationModel;
     }
 
+    /**
+     * Send a list of strings to Ollama to be embedded.
+     * @param strings the list of strings to be embedded separately
+     * @returns the vectors representing strings
+     */
     public List<List<Double>> embed(List<String> strings) {
         EmbedResponse resp = restClient.post()
             .uri("/api/embed")
@@ -37,6 +45,11 @@ public class OllamaClient {
         return resp.embeddings();
     }
 
+    /**
+     * Send a generation prompt to Ollama
+     * @param prompt the prompt to send
+     * @returns the LLM's response to the prompt
+     */
     public String generate(String prompt) {
         GenerateResponse resp = restClient.post()
             .uri("/api/generate")

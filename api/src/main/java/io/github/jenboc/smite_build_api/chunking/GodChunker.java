@@ -22,6 +22,11 @@ import io.github.jenboc.smite_build_api.model.TextStatData;
 import io.github.jenboc.smite_build_api.model.TieredStatData;
 import io.github.jenboc.smite_build_api.model.God.Role;
 
+/**
+ * Breaks a god down into chunks.
+ * @see God
+ * @see Chunk
+*/
 @Component
 public class GodChunker extends Chunker<God> {
 
@@ -34,6 +39,16 @@ public class GodChunker extends Chunker<God> {
         "Ultimate Ability", AbilitySet::getUltimate
     );
 
+    /**
+     * Break a god down into chunks. Chunks include
+     *
+     * <ul>
+     *      <li>A God overview</li>
+     *      <li>Ability overviews</li>
+     *      <li>Aspect overview</li>
+     *      <li>Aspect modification overviews</li>
+     * </ul>
+     */
     @Override
     public List<Chunk> chunk(God obj) {
         String godName = obj.getName();

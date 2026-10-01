@@ -5,6 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Setter;
 import lombok.Getter;
 
+/**
+ * Represents a single component in a "75% Intelligence + 25% Strength" string
+ * (i.e. 75% Intelligence)
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 public class ScaledComponent {

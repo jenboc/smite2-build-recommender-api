@@ -21,6 +21,9 @@ import io.github.jenboc.smite_build_api.model.Item;
 import io.github.jenboc.smite_build_api.model.Manifest;
 
 
+/**
+ * Spring Boot Service which loads scraped God and Item .json files.
+ */
 @Service 
 public class DataLoader {
 
@@ -73,18 +76,32 @@ public class DataLoader {
         return result;
     }
 
+    /**
+     * Get a list of all loaded gods
+     */
     public List<God> getAllGods() {
         return List.copyOf(gods.values());
     }
-
+    
+    /**
+     * Lookup a god by name
+     * @param name the god's name (case insensitive)
+     */
     public Optional<God> getGodByName(String name) {
         return Optional.ofNullable(gods.get(name.toLowerCase()));
     }
 
+    /**
+     * Get a list of all loaded items
+     */
     public List<Item> getAllItems() {
         return List.copyOf(items.values());
     }
 
+    /**
+     * Lookup an item by name
+     * @param name the item's name (case insensitive)
+     */
     public Optional<Item> getItemByName(String name) {
         return Optional.ofNullable(items.get(name.toLowerCase()));
     }
