@@ -31,6 +31,7 @@ public class DataLoader {
     private final Path dataDir;
 
     // Internal state that is populated by loadAll()
+    private Manifest manifest;
     private Map<String, God> gods = new HashMap<>();
     private Map<String, Item> items = new HashMap<>();
 
@@ -41,7 +42,7 @@ public class DataLoader {
 
     @PostConstruct
     void loadAll() {
-        Manifest manifest = loadManifest();
+        this.manifest = loadManifest();
         this.gods = loadEntries(manifest.getGods(), God.class);
         this.items = loadEntries(manifest.getItems(), Item.class);
 
@@ -104,5 +105,12 @@ public class DataLoader {
      */
     public Optional<Item> getItemByName(String name) {
         return Optional.ofNullable(items.get(name.toLowerCase()));
+    }
+
+    /**
+     * Get the manifest
+     */
+    public Manifest getManifest() {
+        return manifest;
     }
 }

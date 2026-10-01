@@ -205,9 +205,16 @@ public class GodChunker extends Chunker<God> {
 
         List<String> parts = new ArrayList<>();
 
-        stats.forEach((name, baseStat) -> parts.add(
-            formatBaseStat(baseStat) + " " + readableEnumName(name)
-        ));
+        stats.forEach((name, baseStat) -> {
+            // Skip null base stats (e.g. mana + mana regen for manaless gods)
+            if (baseStat == null) {
+                return;
+            }
+
+            parts.add(
+                formatBaseStat(baseStat) + " " + readableEnumName(name)
+            );
+        });
 
         return String.join(", ", parts);
     }
