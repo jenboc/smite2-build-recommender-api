@@ -53,7 +53,11 @@ public class OllamaClient {
     public String generate(String prompt) {
         GenerateResponse resp = restClient.post()
             .uri("/api/generate")
-            .body(new GenerateRequest(generationModel, prompt, false))
+            .body(new GenerateRequest(
+                        generationModel, 
+                        prompt, 
+                        new GenerateOptions(8192), 
+                        false))
             .retrieve()
             .body(GenerateResponse.class);
 
