@@ -16,4 +16,11 @@ public class ApiExceptionHandler {
             .status(HttpStatus.NOT_FOUND)
             .body(Map.of("error", ex.getMessage()));
     }
+
+    @ExceptionHandler(ItemNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleItemNotFound(ItemNotFoundException ex) {
+        return ResponseEntity
+            .status(HttpStatus.NOT_FOUND)
+            .body(Map.of("error", ex.getMessage()));
+    }
 }
