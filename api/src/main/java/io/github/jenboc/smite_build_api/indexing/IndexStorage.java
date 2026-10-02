@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
+import tools.jackson.core.exc.StreamReadException;
 import tools.jackson.databind.json.JsonMapper;
 
 /**
@@ -34,7 +35,7 @@ public class IndexStorage {
 
         try (InputStream in = Files.newInputStream(indexPath)) {
             return Optional.of(jsonMapper.readValue(in, IndexFile.class));
-        } catch (IOException e) {
+        } catch (IOException | StreamReadException e) {
             System.err.printf("Could not read index as %s, treating as missing: %s\n",
                 indexPath, e.getMessage());
             return Optional.empty();
