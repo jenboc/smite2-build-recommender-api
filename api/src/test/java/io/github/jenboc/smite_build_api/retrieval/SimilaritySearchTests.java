@@ -9,8 +9,6 @@ import org.junit.jupiter.api.Test;
 
 class SimilaritySearchTests {
 
-    private final SimilaritySearch search = new SimilaritySearch();
-
     @Test
     void consineReturnsCorrectForUnitVectors() {
         // Unit vectors simply calculate the dot-product
@@ -18,15 +16,15 @@ class SimilaritySearchTests {
         // Dim = 1
         List<Double> u = List.of(1.0);
         List<Double> v = List.of(1.0);
-        assertEquals(1, search.cosineSimilarity(u, v));
-        assertEquals(1, search.cosineSimilarity(v, u));
+        assertEquals(1, SimilaritySearch.cosineSimilarity(u, v));
+        assertEquals(1, SimilaritySearch.cosineSimilarity(v, u));
 
         // Dim = 3
         double x = 1.0 / Math.sqrt(2.0);
         u = List.of(x, 0.0, x);
         v = List.of(0.0, x, x);
-        assertEquals(0.5, search.cosineSimilarity(u, v));
-        assertEquals(0.5, search.cosineSimilarity(v, u));
+        assertEquals(0.5, SimilaritySearch.cosineSimilarity(u, v));
+        assertEquals(0.5, SimilaritySearch.cosineSimilarity(v, u));
     }
 
     @Test
@@ -36,14 +34,14 @@ class SimilaritySearchTests {
         // Dim = 1
         List<Double> u = List.of(100.0);
         List<Double> v = List.of(9293.0);
-        assertEquals(1.0, search.cosineSimilarity(u, v));
-        assertEquals(1.0, search.cosineSimilarity(v, u));
+        assertEquals(1.0, SimilaritySearch.cosineSimilarity(u, v));
+        assertEquals(1.0, SimilaritySearch.cosineSimilarity(v, u));
 
         // Dim = 3
         u = List.of(143.0, 0.0, 143.0);
         v = List.of(0.0, 527.0, 527.0);
-        assertEquals(0.5, search.cosineSimilarity(u, v));
-        assertEquals(0.5, search.cosineSimilarity(v, u));
+        assertEquals(0.5, SimilaritySearch.cosineSimilarity(u, v));
+        assertEquals(0.5, SimilaritySearch.cosineSimilarity(v, u));
     }
 
     @Test 
@@ -53,12 +51,12 @@ class SimilaritySearchTests {
 
         assertThrows(
             IllegalArgumentException.class,
-            () -> search.cosineSimilarity(u, v)
+            () -> SimilaritySearch.cosineSimilarity(u, v)
         );
 
         assertThrows(
             IllegalArgumentException.class,
-            () -> search.cosineSimilarity(v, u)
+            () -> SimilaritySearch.cosineSimilarity(v, u)
         );
     }
 
@@ -69,12 +67,12 @@ class SimilaritySearchTests {
 
         assertThrows(
             IllegalArgumentException.class,
-            () -> search.cosineSimilarity(u, v)
+            () -> SimilaritySearch.cosineSimilarity(u, v)
         );
 
         assertThrows(
             IllegalArgumentException.class,
-            () -> search.cosineSimilarity(v, u)
+            () -> SimilaritySearch.cosineSimilarity(v, u)
         );
     }
 }

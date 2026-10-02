@@ -14,7 +14,7 @@ public class SimilaritySearch {
      * @param v the second vector
      * @returns cos(theta), where theta is the angle between them
      */
-    public double cosineSimilarity(List<Double> u, List<Double> v) {
+    public static double cosineSimilarity(List<Double> u, List<Double> v) {
         if (u.size() != v.size()) {
             throw new IllegalArgumentException(
                 "Can only check similarity of vectors of same dimension, was given "

@@ -23,17 +23,20 @@ public class IndexStartupRunner implements ApplicationRunner {
     private final DataLoader dataLoader;
     private final Indexer indexer;
     private final IndexStorage indexStorage;
+    private final IndexContainer indexContainer;
     private final Path indexDir;
 
     public IndexStartupRunner(
             DataLoader dataLoader,
             Indexer indexer,
             IndexStorage indexStorage,
+            IndexContainer indexContainer,
             @Value("${index.path}") String indexDir
     ) {
         this.dataLoader = dataLoader;
         this.indexer = indexer;
         this.indexStorage = indexStorage;
+        this.indexContainer = indexContainer;
         this.indexDir = Path.of(indexDir);
     }
 
@@ -55,6 +58,7 @@ public class IndexStartupRunner implements ApplicationRunner {
         if (!isStale) {
             System.out.printf("Index up to date (patch %s), skipping rebuild.\n",
                 currentPatch);
+            indexContainer.setChunks(existingIndex.get().chunks());
             return;
         }
 
@@ -69,6 +73,6 @@ public class IndexStartupRunner implements ApplicationRunner {
 
         System.out.printf("Index rebuilt: %d chunks, patch %s\n",
             fresh.chunks().size(), currentPatch);
-
+        indexContainer.setChunks(fresh.chunks());
     }
 }
