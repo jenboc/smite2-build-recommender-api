@@ -2,7 +2,6 @@ package io.github.jenboc.smite_build_api.retrieval;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
@@ -19,16 +18,16 @@ import io.github.jenboc.smite_build_api.indexing.IndexedChunk;
 import io.github.jenboc.smite_build_api.ollama.OllamaClient;
 
 @ExtendWith(MockitoExtension.class)
-class RetrieverTests {
+class VectorRetrieverTests {
 
     @Mock private OllamaClient ollamaClient;
     @Mock private IndexContainer indexContainer;
 
-    private Retriever retriever;
+    private VectorRetriever retriever;
 
     @BeforeEach
     void setUp() {
-        retriever = new Retriever(ollamaClient, indexContainer);
+        retriever = new VectorRetriever(ollamaClient, indexContainer);
     }
 
     private IndexedChunk chunk(String text, List<Double> vector) {
@@ -43,10 +42,9 @@ class RetrieverTests {
         IndexedChunk partial = chunk("partial", List.of(0.7, 0.7));
         IndexedChunk opposite = chunk("opposite", List.of(-1.0, 0.0));
 
-        when(ollamaClient.embed(List.of("query"))).thenReturn(List.of(queryVector));
         when(indexContainer.getChunks()).thenReturn(List.of(partial, opposite, exact));
 
-        List<IndexedChunk> res = retriever.retrieve("query", 3);
+        List<IndexedChunk> res = retriever.retrieve(queryVector, 3);
         assertEquals(List.of(exact, partial, opposite), res);
     }
 
@@ -58,10 +56,9 @@ class RetrieverTests {
         IndexedChunk partial = chunk("partial", List.of(0.7, 0.7));
         IndexedChunk opposite = chunk("opposite", List.of(-1.0, 0.0));
 
-        when(ollamaClient.embed(List.of("query"))).thenReturn(List.of(queryVector));
         when(indexContainer.getChunks()).thenReturn(List.of(partial, opposite, exact));
 
-        List<IndexedChunk> res = retriever.retrieve("query", 2);
+        List<IndexedChunk> res = retriever.retrieve(queryVector, 2);
         assertEquals(List.of(exact, partial), res);
     }
 
@@ -73,10 +70,9 @@ class RetrieverTests {
         IndexedChunk partial = chunk("partial", List.of(0.7, 0.7));
         IndexedChunk opposite = chunk("opposite", List.of(-1.0, 0.0));
 
-        when(ollamaClient.embed(List.of("query"))).thenReturn(List.of(queryVector));
         when(indexContainer.getChunks()).thenReturn(List.of(partial, opposite, exact));
 
-        List<IndexedChunk> res = retriever.retrieve("query", 5000);
+        List<IndexedChunk> res = retriever.retrieve(queryVector, 5000);
         assertEquals(List.of(exact, partial, opposite), res);
     }
 
@@ -84,9 +80,8 @@ class RetrieverTests {
     void returnsEmptyListWhenIndexIsEmptyWithNoEmbedCall() {
         when(indexContainer.getChunks()).thenReturn(List.of());
 
-        List<IndexedChunk> res = retriever.retrieve("query", 10);
+        List<IndexedChunk> res = retriever.retrieve(List.of(1.0), 10);
         assertTrue(res.isEmpty());
-        verify(ollamaClient, org.mockito.Mockito.never()).embed(List.of("query"));
     }
 
     @Test
@@ -97,10 +92,8 @@ class RetrieverTests {
         IndexedChunk partial = chunk("partial", List.of(0.7, 0.7));
         IndexedChunk opposite = chunk("opposite", List.of(-1.0, 0.0));
 
-        when(ollamaClient.embed(List.of("query"))).thenReturn(List.of(queryVector));
         when(indexContainer.getChunks()).thenReturn(List.of(partial, opposite, exact));
 
-        retriever.retrieve("query", 10);
-        verify(ollamaClient).embed(List.of("query"));
+        retriever.retrieve(queryVector, 10);
     }
 }

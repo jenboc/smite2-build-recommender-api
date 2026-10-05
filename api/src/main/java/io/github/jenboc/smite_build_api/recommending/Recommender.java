@@ -7,17 +7,17 @@ import org.springframework.stereotype.Service;
 import io.github.jenboc.smite_build_api.indexing.IndexedChunk;
 import io.github.jenboc.smite_build_api.ollama.OllamaClient;
 import io.github.jenboc.smite_build_api.prompts.PromptBuilder;
-import io.github.jenboc.smite_build_api.retrieval.Retriever;
+import io.github.jenboc.smite_build_api.retrieval.VectorRetriever;
 
 @Service
 public class Recommender {
 
     private final OllamaClient ollamaClient;
-    private final Retriever retriever;
+    private final VectorRetriever retriever;
 
     public Recommender(
             OllamaClient ollamaClient,
-            Retriever retriever
+            VectorRetriever retriever
     ) {
         this.ollamaClient = ollamaClient;
         this.retriever = retriever;
@@ -30,7 +30,8 @@ public class Recommender {
      * @see RecommendationResponse
      */
     public String queryForRecommendation(String userQuery) {
-        return ollamaClient.generate(buildPrompt(userQuery, retriever.retrieve(userQuery, 25)));
+        List<Double> vec = ollamaClient.embed(List.of(userQuery)).get(0);
+        return ollamaClient.generate(buildPrompt(userQuery, retriever.retrieve(vec, 25)));
     }
 
     private String buildPrompt(String userQuery, List<IndexedChunk> context) {
