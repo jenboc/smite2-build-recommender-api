@@ -30,7 +30,7 @@ class GodDeserialisationTest {
     private JsonMapper jsonMapper;
 
     private God loadMerlin() throws IOException {
-        try (InputStream in = new ClassPathResource("gods/merlin.json").getInputStream()) {
+        try (InputStream in = new ClassPathResource("test-data/gods/merlin.json").getInputStream()) {
             return jsonMapper.readValue(in, God.class);
         }
     }

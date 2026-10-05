@@ -31,7 +31,7 @@ class ItemDeserialisationTest {
     private JsonMapper jsonMapper;
  
     private Item load(String filename) throws IOException {
-        try (InputStream in = new ClassPathResource("items/" + filename).getInputStream()) {
+        try (InputStream in = new ClassPathResource("test-data/items/" + filename).getInputStream()) {
             return jsonMapper.readValue(in, Item.class);
         }
     }

@@ -1,0 +1,13 @@
+{
+    "patch": "test-fixture",
+    "pulled_at": "2026-01-01T00:00:00Z",
+    "source": "test fixture data",
+    "counts": {"gods": 1, "items": 2},
+    "gods": [
+        {"name": "Merlin", "file": "gods/merlin.json", "sha256": "..."}
+    ],
+    "items": [
+        {"name": "Gauntlet of Thebes", "file": "items/gauntlet_of_thebes.json", "sha256": "..."},
+        {"name": "Aegis of Acceleration", "file": "items/aegis_of_acceleration.json", "sha256": "..."}
+    ]
+}

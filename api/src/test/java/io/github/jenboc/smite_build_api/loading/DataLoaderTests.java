@@ -15,10 +15,21 @@ class DataLoaderTests {
     private DataLoader dataLoader;
 
     @Test 
-    void loadsRealData() {
+    void loadsTestData() {
         assertFalse(dataLoader.getAllGods().isEmpty());
         assertFalse(dataLoader.getAllItems().isEmpty());
         assertTrue(dataLoader.getGodByName("merlin").isPresent());
         assertTrue(dataLoader.getItemByName("gauntlet of thebes").isPresent());
+        assertTrue(dataLoader.getItemByName("aegis of acceleration").isPresent());
+    }
+
+    @Test
+    void getGodByNameIsCaseInsensitive() {
+        assertTrue(dataLoader.getGodByName("mErLiN").isPresent());
+    }
+
+    @Test
+    void getItemByNameIsCaseInsensitive() {
+        assertTrue(dataLoader.getItemByName("gAuNTLET of thEBES").isPresent());
     }
 }
