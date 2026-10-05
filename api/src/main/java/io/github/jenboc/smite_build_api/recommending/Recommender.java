@@ -6,22 +6,20 @@ import org.springframework.stereotype.Service;
 
 import io.github.jenboc.smite_build_api.indexing.IndexedChunk;
 import io.github.jenboc.smite_build_api.ollama.OllamaClient;
+import io.github.jenboc.smite_build_api.prompts.PromptBuilder;
 import io.github.jenboc.smite_build_api.retrieval.Retriever;
 
 @Service
 public class Recommender {
 
     private final OllamaClient ollamaClient;
-    private final RecommendationPromptBuilder promptBuilder;
     private final Retriever retriever;
 
     public Recommender(
             OllamaClient ollamaClient,
-            RecommendationPromptBuilder promptBuilder,
             Retriever retriever
     ) {
         this.ollamaClient = ollamaClient;
-        this.promptBuilder = promptBuilder;
         this.retriever = retriever;
     }
 
@@ -32,9 +30,39 @@ public class Recommender {
      * @see RecommendationResponse
      */
     public String queryForRecommendation(String userQuery) {
-        List<IndexedChunk> context = retriever.retrieve(userQuery, 25);
-        String prompt = promptBuilder.buildPrompt(userQuery, context);
-
-        return ollamaClient.generate(prompt);
+        return ollamaClient.generate(buildPrompt(userQuery, retriever.retrieve(userQuery, 25)));
     }
+
+    private String buildPrompt(String userQuery, List<IndexedChunk> context) {
+        return new PromptBuilder()
+            .withInstructions(PROMPT_INSTRUCTIONS)
+            .withContext(context)
+            .withUserQuery(userQuery)
+            .build();
+    }
+
+    private final String PROMPT_INSTRUCTIONS = """
+        You are a SMITE 2 build recommendation assistant.
+
+        Your task is to recommend builds using ONLY the information provided
+        in the retrieved context.
+
+        Use the retrieved context as your factual source.
+        
+        Do not invent:
+        - Gods
+        - Items
+        - Abilities
+        - Stats
+        - Item Effects
+        - Ability Effects
+
+        If the retrieved context does not contain enough information to answer
+        the request, say that the available data is insufficient.
+
+        When recommending items, only recommend items present in the retrieved
+        context.
+
+        Explain briefly why the recommended items fit the user's request.
+    """.strip();
 }
