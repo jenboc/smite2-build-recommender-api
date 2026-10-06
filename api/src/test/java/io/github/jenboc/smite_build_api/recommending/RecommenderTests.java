@@ -20,14 +20,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import io.github.jenboc.smite_build_api.indexing.IndexedChunk;
 import io.github.jenboc.smite_build_api.ollama.OllamaClient;
-import io.github.jenboc.smite_build_api.retrieval.Retriever;
+import io.github.jenboc.smite_build_api.retrieval.VectorRetriever;
 
 
 @ExtendWith(MockitoExtension.class)
 class RecommenderTests {
 
     @Mock OllamaClient ollamaClient;
-    @Mock Retriever retriever;
+    @Mock VectorRetriever retriever;
 
     private Recommender recommender;
 
@@ -41,7 +41,10 @@ class RecommenderTests {
             List<IndexedChunk> retrievedChunks,
             String generatedResponse
     ) {
-        when(retriever.retrieve(eq(userQuery), anyInt()))
+        when(ollamaClient.embed(any()))
+            .thenReturn(List.of(List.of(1.0)));
+
+        when(retriever.retrieve(any(), anyInt()))
             .thenReturn(retrievedChunks);
 
         when(ollamaClient.generate(any()))
@@ -59,7 +62,10 @@ class RecommenderTests {
 
     @Test
     void propagatesRetrievalExceptions() {
-        when(retriever.retrieve(eq("query"), anyInt()))
+        when(ollamaClient.embed(any()))
+            .thenReturn(List.of(List.of(1.0)));
+
+        when(retriever.retrieve(any(), anyInt()))
             .thenThrow(new RuntimeException("Retrieval Exception"));
 
         assertThrows(RuntimeException.class,
@@ -69,7 +75,10 @@ class RecommenderTests {
 
     @Test
     void propagatesOllamaExceptions() {
-        when(retriever.retrieve(eq("query"), anyInt()))
+        when(ollamaClient.embed(any()))
+            .thenReturn(List.of(List.of(1.0)));
+
+        when(retriever.retrieve(any(), anyInt()))
             .thenReturn(List.of());
 
         when(ollamaClient.generate(any()))

@@ -15,19 +15,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import io.github.jenboc.smite_build_api.indexing.IndexContainer;
 import io.github.jenboc.smite_build_api.indexing.IndexedChunk;
-import io.github.jenboc.smite_build_api.ollama.OllamaClient;
 
 @ExtendWith(MockitoExtension.class)
 class VectorRetrieverTests {
 
-    @Mock private OllamaClient ollamaClient;
     @Mock private IndexContainer indexContainer;
 
     private VectorRetriever retriever;
 
     @BeforeEach
     void setUp() {
-        retriever = new VectorRetriever(ollamaClient, indexContainer);
+        retriever = new VectorRetriever(indexContainer);
     }
 
     private IndexedChunk chunk(String text, List<Double> vector) {
@@ -77,23 +75,10 @@ class VectorRetrieverTests {
     }
 
     @Test
-    void returnsEmptyListWhenIndexIsEmptyWithNoEmbedCall() {
+    void returnsEmptyListWhenIndexIsEmpty() {
         when(indexContainer.getChunks()).thenReturn(List.of());
 
         List<IndexedChunk> res = retriever.retrieve(List.of(1.0), 10);
         assertTrue(res.isEmpty());
-    }
-
-    @Test
-    void embedsTheQueryExactlyOnceIfIndexNonEmpty() {
-        List<Double> queryVector = List.of(1.0, 0.0);
-
-        IndexedChunk exact = chunk("exact", queryVector);
-        IndexedChunk partial = chunk("partial", List.of(0.7, 0.7));
-        IndexedChunk opposite = chunk("opposite", List.of(-1.0, 0.0));
-
-        when(indexContainer.getChunks()).thenReturn(List.of(partial, opposite, exact));
-
-        retriever.retrieve(queryVector, 10);
     }
 }

@@ -14,12 +14,11 @@ import io.github.jenboc.smite_build_api.ollama.OllamaClient;
  * @see SimilaritySearch
  */
 @Service
-public class VectorRetriever implements Retriever<List<Double>> {
+public class VectorRetriever implements LimitedRetriever<List<Double>> {
 
     private final IndexContainer indexContainer;
 
     public VectorRetriever(
-            OllamaClient ollamaClient,
             IndexContainer indexContainer
     ) {
         this.indexContainer = indexContainer;

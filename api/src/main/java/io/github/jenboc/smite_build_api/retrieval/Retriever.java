@@ -13,7 +13,6 @@ public interface Retriever<T> {
     /**
      * Retrieve relevant chunks
      * @param query the object which determines what is relevant
-     * @param limit the upper bound on the number of chunks to return
      */
-    public List<IndexedChunk> retrieve(T query, int limit);
+    public List<IndexedChunk> retrieve(T query);
 }
