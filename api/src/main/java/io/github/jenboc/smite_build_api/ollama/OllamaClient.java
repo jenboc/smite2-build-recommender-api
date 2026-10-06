@@ -51,12 +51,16 @@ public class OllamaClient {
      * @returns the LLM's response to the prompt
      */
     public String generate(String prompt) {
+        return generate(prompt, new GenerateOptions(8192, 0.8));
+    }
+
+    public String generate(String prompt, GenerateOptions options) {
         GenerateResponse resp = restClient.post()
             .uri("/api/generate")
             .body(new GenerateRequest(
                         generationModel, 
                         prompt, 
-                        new GenerateOptions(8192), 
+                        options, 
                         false))
             .retrieve()
             .body(GenerateResponse.class);
@@ -66,5 +70,6 @@ public class OllamaClient {
         }
 
         return resp.response();
+    
     }
 }

@@ -5,15 +5,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.util.List;
 
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@Tag("integration")
-@SpringBootTest
+import io.github.jenboc.smite_build_api.IntegrationTest;
+
+@IntegrationTest
 class OllamaClientIntegrationTests {
-    
+
     @Autowired
     private OllamaClient client;
 

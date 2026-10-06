@@ -10,6 +10,7 @@ import io.github.jenboc.smite_build_api.loading.DataLoader;
 import io.github.jenboc.smite_build_api.model.God;
 import io.github.jenboc.smite_build_api.model.GodStatType;
 import io.github.jenboc.smite_build_api.model.Item;
+import io.github.jenboc.smite_build_api.ollama.GenerateOptions;
 import io.github.jenboc.smite_build_api.ollama.OllamaClient;
 import io.github.jenboc.smite_build_api.prompts.PromptBuilder;
 import tools.jackson.core.exc.StreamReadException;
@@ -42,7 +43,10 @@ public class QueryDecoder {
      */
     public DecodedQuery decode(String query) {
         String prompt = buildPrompt(query);
-        String rawResponse = ollamaClient.generate(prompt);
+        
+        GenerateOptions options = new GenerateOptions(8192, 0.0);
+        String rawResponse = ollamaClient.generate(prompt, options);
+        
         LLMDecodeResponse serialisedResponse = serialiseResponse(rawResponse);
 
         return validateLLMResponse(serialisedResponse, query);
