@@ -1,6 +1,8 @@
 package io.github.jenboc.smite_build_api.retrieval;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -37,9 +39,9 @@ public class GodStatTypeRetriever implements Retriever<GodStatType> {
     }
 
     private List<IndexedChunk> itemsToChunks(List<Item> items) {
-        List<String> itemNames = items.stream()
+        Set<String> itemNames = items.stream()
             .map(i -> i.getName().toLowerCase())
-            .toList();
+            .collect(Collectors.toSet());
 
         return indexContainer.getChunks().stream()
             .filter(c -> "item".equals(c.metadata().get("type"))
