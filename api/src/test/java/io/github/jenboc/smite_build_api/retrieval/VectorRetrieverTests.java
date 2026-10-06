@@ -15,17 +15,19 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import io.github.jenboc.smite_build_api.indexing.IndexContainer;
 import io.github.jenboc.smite_build_api.indexing.IndexedChunk;
+import io.github.jenboc.smite_build_api.ollama.OllamaClient;
 
 @ExtendWith(MockitoExtension.class)
 class VectorRetrieverTests {
 
+    @Mock private OllamaClient ollamaClient;
     @Mock private IndexContainer indexContainer;
 
     private VectorRetriever retriever;
 
     @BeforeEach
     void setUp() {
-        retriever = new VectorRetriever(indexContainer);
+        retriever = new VectorRetriever(ollamaClient, indexContainer);
     }
 
     private IndexedChunk chunk(String text, List<Double> vector) {

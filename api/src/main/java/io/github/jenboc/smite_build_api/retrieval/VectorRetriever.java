@@ -16,11 +16,14 @@ import io.github.jenboc.smite_build_api.ollama.OllamaClient;
 @Service
 public class VectorRetriever implements LimitedRetriever<List<Double>> {
 
+    private final OllamaClient ollamaClient;
     private final IndexContainer indexContainer;
 
     public VectorRetriever(
+            OllamaClient ollamaClient,
             IndexContainer indexContainer
     ) {
+        this.ollamaClient = ollamaClient;
         this.indexContainer = indexContainer;
     }
 
@@ -50,5 +53,14 @@ public class VectorRetriever implements LimitedRetriever<List<Double>> {
             .limit(topK)
             .map(Map.Entry::getKey)
             .toList();
+    }
+
+    public List<IndexedChunk> retrieveByString(String query, int topK) {
+        if (indexContainer.getChunks() == null || indexContainer.getChunks().isEmpty()) {
+            return List.of();
+        }
+
+        List<Double> vec = ollamaClient.embed(List.of(query)).get(0);
+        return retrieve(vec, topK);
     }
 }
