@@ -2,15 +2,11 @@ package io.github.jenboc.smite_build_api.recommending;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
-import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,22 +14,25 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import io.github.jenboc.smite_build_api.decoding.DecodedQuery;
+import io.github.jenboc.smite_build_api.decoding.QueryDecoder;
+import io.github.jenboc.smite_build_api.decoding.QueryType;
 import io.github.jenboc.smite_build_api.indexing.IndexedChunk;
 import io.github.jenboc.smite_build_api.ollama.OllamaClient;
-import io.github.jenboc.smite_build_api.retrieval.VectorRetriever;
 
 
 @ExtendWith(MockitoExtension.class)
 class RecommenderTests {
 
+    @Mock QueryDecoder queryDecoder;
+    @Mock ContextGatherer gatherer;
     @Mock OllamaClient ollamaClient;
-    @Mock VectorRetriever retriever;
 
     private Recommender recommender;
 
     @BeforeEach
     void setUp() {
-        recommender = new Recommender(ollamaClient, retriever);
+        recommender = new Recommender(queryDecoder, gatherer, ollamaClient);
     }
 
     private void setupMockCalls(
@@ -41,10 +40,19 @@ class RecommenderTests {
             List<IndexedChunk> retrievedChunks,
             String generatedResponse
     ) {
-        when(ollamaClient.embed(any()))
-            .thenReturn(List.of(List.of(1.0)));
+        when(queryDecoder.decode(any()))
+            .thenReturn(new DecodedQuery(
+                QueryType.BUILD_RECOMMENDATION,
+                List.of(),
+                List.of(),
+                List.of(),
+                List.of(),
+                List.of(),
+                List.of(),
+                userQuery
+            ));
 
-        when(retriever.retrieve(any(), anyInt()))
+        when(gatherer.gather(any()))
             .thenReturn(retrievedChunks);
 
         when(ollamaClient.generate(any()))
@@ -61,12 +69,9 @@ class RecommenderTests {
     }
 
     @Test
-    void propagatesRetrievalExceptions() {
-        when(ollamaClient.embed(any()))
-            .thenReturn(List.of(List.of(1.0)));
-
-        when(retriever.retrieve(any(), anyInt()))
-            .thenThrow(new RuntimeException("Retrieval Exception"));
+    void propagatesGathererExceptions() {
+        when(gatherer.gather(any()))
+            .thenThrow(new RuntimeException("Gathering Exception"));
 
         assertThrows(RuntimeException.class,
                 () -> recommender.queryForRecommendation("query"),
@@ -75,13 +80,10 @@ class RecommenderTests {
 
     @Test
     void propagatesOllamaExceptions() {
-        when(ollamaClient.embed(any()))
-            .thenReturn(List.of(List.of(1.0)));
-
-        when(retriever.retrieve(any(), anyInt()))
+        when(gatherer.gather(any()))
             .thenReturn(List.of());
 
-        when(ollamaClient.generate(any()))
+        lenient().when(ollamaClient.generate(any()))
             .thenThrow(new RuntimeException("Ollama Exception"));
 
         assertThrows(RuntimeException.class,

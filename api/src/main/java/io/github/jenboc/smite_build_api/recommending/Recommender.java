@@ -4,34 +4,49 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import io.github.jenboc.smite_build_api.decoding.DecodedQuery;
+import io.github.jenboc.smite_build_api.decoding.QueryDecoder;
 import io.github.jenboc.smite_build_api.indexing.IndexedChunk;
 import io.github.jenboc.smite_build_api.ollama.OllamaClient;
 import io.github.jenboc.smite_build_api.prompts.PromptBuilder;
-import io.github.jenboc.smite_build_api.retrieval.VectorRetriever;
 
 @Service
 public class Recommender {
 
+    private final QueryDecoder queryDecoder;
+    private final ContextGatherer contextGatherer;
     private final OllamaClient ollamaClient;
-    private final VectorRetriever retriever;
 
     public Recommender(
-            OllamaClient ollamaClient,
-            VectorRetriever retriever
+            QueryDecoder queryDecoder,
+            ContextGatherer contextGatherer,
+            OllamaClient ollamaClient
     ) {
+        this.queryDecoder = queryDecoder;
+        this.contextGatherer = contextGatherer;
         this.ollamaClient = ollamaClient;
-        this.retriever = retriever;
     }
 
     /**
      * Query the LLM for a build recommendation
-     * @param userQuery the user query passed to the API
-     * @returns a RecommendationResponse DTO which contains the response
-     * @see RecommendationResponse
+     * @param userQuery the raw string user query
+     * @returns the raw string of the LLM response
      */
     public String queryForRecommendation(String userQuery) {
-        List<Double> vec = ollamaClient.embed(List.of(userQuery)).get(0);
-        return ollamaClient.generate(buildPrompt(userQuery, retriever.retrieve(vec, 25)));
+        DecodedQuery decoded = queryDecoder.decode(userQuery);
+        return queryForRecommendation(decoded);
+    }
+
+    /**
+     * Query the LLM for a build recommendation using a decoded query
+     * @param userQuery the decoded user query
+     * @returns the raw string of the LLM response
+     */
+    public String queryForRecommendation(DecodedQuery userQuery) {
+        List<IndexedChunk> ctx = contextGatherer.gather(userQuery);
+        String prompt = buildPrompt(userQuery.rawQuery(), ctx);
+
+        return ollamaClient.generate(prompt);
     }
 
     private String buildPrompt(String userQuery, List<IndexedChunk> context) {
