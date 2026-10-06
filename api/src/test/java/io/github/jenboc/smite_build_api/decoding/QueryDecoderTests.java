@@ -150,6 +150,34 @@ class QueryDecoderTests {
     }
 
     @Test
+    void decodedQueryStoresRaw() {
+        mockEmptyGetAll();
+
+        when(ollamaClient.generate(any()))
+            .thenReturn(
+                """
+                {
+                    "type": "ITEM_SYNERGY",
+                    "primary_gods": [],
+                    "opponent_gods": [],
+                    "primary_aspects": [],
+                    "opponent_aspects": [],
+                    "wanted_items": [],
+                    "excluded_items": [],
+                    "wanted_stats": [],
+                    "excluded_stats": []
+                }
+                """.strip()
+            );
+
+        DecodedQuery query = queryDecoder.decode("boop boop beep boop boop");
+        assertEquals(
+                "boop boop beep boop boop",
+                query.rawQuery()
+        );
+    }
+
+    @Test
     void correctlyRetrievesMentionedItems() {
         mockEmptyGetAll();
 

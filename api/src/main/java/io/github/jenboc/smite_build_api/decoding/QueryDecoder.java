@@ -45,7 +45,7 @@ public class QueryDecoder {
         String rawResponse = ollamaClient.generate(prompt);
         LLMDecodeResponse serialisedResponse = serialiseResponse(rawResponse);
 
-        return validateLLMResponse(serialisedResponse);
+        return validateLLMResponse(serialisedResponse, query);
     }
 
     private LLMDecodeResponse serialiseResponse(String response) {
@@ -59,7 +59,7 @@ public class QueryDecoder {
         }
     }
 
-    private DecodedQuery validateLLMResponse(LLMDecodeResponse response) {
+    private DecodedQuery validateLLMResponse(LLMDecodeResponse response, String raw) {
         // We must assume that the lengths of primaryGods and primaryAspects are
         // the same.
         if (response.primaryGods().size() != response.primaryAspects().size()) {
@@ -81,7 +81,8 @@ public class QueryDecoder {
             collectItems(response.wantedItems()),
             collectItems(response.excludedItems()),
             response.wantedStats(),
-            response.excludedStats()
+            response.excludedStats(),
+            raw
         );
     }
 

@@ -12,5 +12,6 @@ public record DecodedQuery(
         List<Item> wantedItems,
         List<Item> excludedItems,
         List<GodStatType> wantedStats,
-        List<GodStatType> excludedStats
+        List<GodStatType> excludedStats,
+        String rawQuery
 ) {}
