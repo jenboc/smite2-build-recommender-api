@@ -2,8 +2,6 @@ package io.github.jenboc.smite_build_api.decoding;
 
 import java.util.List;
 
-import io.github.jenboc.smite_build_api.model.GodStatType;
-
 /**
  * Represents the content of the LLM's response to a decode request. Any
  * response that cannot be deserialised into this format is incorrect.
@@ -17,13 +15,13 @@ import io.github.jenboc.smite_build_api.model.GodStatType;
  * @param excludedStats the names of stats the user wishes to avoid
  */
 public record LLMDecodeResponse(
-        QueryType type,
+        String type,
         List<String> primaryGods,
         List<String> opponentGods,
-        List<AspectFlag> primaryAspects,
-        List<AspectFlag> opponentAspects,
+        List<String> primaryAspects,
+        List<String> opponentAspects,
         List<String> wantedItems,
         List<String> excludedItems,
-        List<GodStatType> wantedStats,
-        List<GodStatType> excludedStats
+        List<String> wantedStats,
+        List<String> excludedStats
 ) {}

@@ -3,6 +3,7 @@ package io.github.jenboc.smite_build_api.decoding;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 
@@ -77,22 +78,38 @@ public class QueryDecoder {
                 + "to be the same size");
         }
 
+        List<GodStatType> wantedStats = response.wantedStats().stream()
+            .map(s -> tryParseEnum(s, GodStatType.class))
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .toList();
+
+        List<GodStatType> excludedStats = response.excludedStats().stream()
+            .map(s -> tryParseEnum(s, GodStatType.class))
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .toList();
+
         // Everything else is a reformatting/data retrieval job
         return new DecodedQuery(
-            response.type(),
+            parseEnum(response.type(), QueryType.GENERAL),
             collectMentions(response.primaryGods(), response.primaryAspects()),
             collectMentions(response.opponentGods(), response.opponentAspects()),
             collectItems(response.wantedItems()),
             collectItems(response.excludedItems()),
-            response.wantedStats(),
-            response.excludedStats(),
+            wantedStats,
+            excludedStats,
             raw
         );
     }
 
-    private List<GodMention> collectMentions(List<String> names, List<AspectFlag> flags) {
+    private List<GodMention> collectMentions(List<String> names, List<String> flagStrings) {
         // Assertion which should've been checked prior
-        assert names.size() == flags.size();
+        assert names.size() == flagStrings.size();
+
+        List<AspectFlag> flags = flagStrings.stream()
+            .map(s -> parseEnum(s, AspectFlag.UNSPECIFIED))
+            .toList();
 
         List<GodMention> mentions = new ArrayList<>();
 
@@ -105,6 +122,24 @@ public class QueryDecoder {
         }
 
         return mentions;
+    }
+
+    private static <E extends Enum<E>> Optional<E> tryParseEnum(String value, Class<E> enumClass) {
+        if (value == null || value.isBlank()) return Optional.empty();
+
+        String normalised = value.trim().toUpperCase().replace(" ", "_").replace("-", "_");
+
+        try {
+            return Optional.of(Enum.valueOf(enumClass, normalised));
+        } catch (IllegalArgumentException e) {
+            return Optional.empty();
+        }
+
+    }
+
+    private static <E extends Enum<E>> E parseEnum(String value, E defaultValue) {
+        return tryParseEnum(value, defaultValue.getDeclaringClass())
+            .orElseGet(() -> defaultValue);
     }
 
     private List<Item> collectItems(List<String> names) {
@@ -187,7 +222,7 @@ public class QueryDecoder {
         - excluded_stats: the names of stats which the user explicitly wants to avoid, or doesn't care about
 
         Rules:
-        - Only use your DOMAIN KNOWLEDGE to fill out these fields
+        - ONLY use EXACT strings from your DOMAIN KNOWLEDGE lists to fill these fields 
         - primary_gods and primary_aspects must be the same length
         - opponent_gods and opponent_aspects must be the same length
         - Ensure that primary_gods[i] relates to primary_aspects[i]

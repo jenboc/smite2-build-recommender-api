@@ -92,7 +92,7 @@ class QueryDecoderTests {
     void throwsIfCannotDeserialiseResponse() {
         mockEmptyGetAll();
 
-        when(ollamaClient.generate(any()))
+        when(ollamaClient.generate(any(), any()))
             .thenReturn("{ Invalid JSON ]");
 
         assertThrows(IllegalLLMDecodeResponse.class, 
@@ -103,7 +103,7 @@ class QueryDecoderTests {
     void throwsIfPrimaryGodsAndAspectsAreDifferentSizes() {
         mockEmptyGetAll();
 
-        when(ollamaClient.generate(any()))
+        when(ollamaClient.generate(any(), any()))
             .thenReturn(
                 """
                 {
@@ -128,7 +128,7 @@ class QueryDecoderTests {
     void throwsIfOpponentGodsandAspectsAreDifferentSizes() {
         mockEmptyGetAll();
 
-        when(ollamaClient.generate(any()))
+        when(ollamaClient.generate(any(), any()))
             .thenReturn(
                 """
                 {
@@ -153,7 +153,7 @@ class QueryDecoderTests {
     void decodedQueryStoresRaw() {
         mockEmptyGetAll();
 
-        when(ollamaClient.generate(any()))
+        when(ollamaClient.generate(any(), any()))
             .thenReturn(
                 """
                 {
@@ -181,7 +181,7 @@ class QueryDecoderTests {
     void correctlyRetrievesMentionedItems() {
         mockEmptyGetAll();
 
-        when(ollamaClient.generate(any()))
+        when(ollamaClient.generate(any(), any()))
             .thenReturn(
                 """
                 {
@@ -209,7 +209,7 @@ class QueryDecoderTests {
     void correctlyCombinesPrimaryGodsAndAspects() {
         mockEmptyGetAll();
 
-        when(ollamaClient.generate(any()))
+        when(ollamaClient.generate(any(), any()))
             .thenReturn(
                 """
                 {
@@ -244,7 +244,7 @@ class QueryDecoderTests {
     void correctlyCombinesOpponentGodsAndAspects() {
         mockEmptyGetAll();
 
-        when(ollamaClient.generate(any()))
+        when(ollamaClient.generate(any(), any()))
             .thenReturn(
                 """
                 {
