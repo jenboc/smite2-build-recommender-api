@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.github.jenboc.smite_build_api.decoding.DecodedQuery;
+import io.github.jenboc.smite_build_api.recommending.RecommendationResponse;
 import io.github.jenboc.smite_build_api.recommending.Recommender;
 
 @RestController
@@ -24,9 +25,7 @@ public class RecommendationController {
             throw new EmptyQueryException(req.query());
         }
 
-        return new RecommendationResponse(
-                recommender.queryForRecommendation(req.query())
-        );
+        return recommender.queryForRecommendation(req.query());
     }
 
     @PostMapping("/decoded")
@@ -35,8 +34,6 @@ public class RecommendationController {
             throw new EmptyQueryException(null);
         }
 
-        return new RecommendationResponse(
-                recommender.queryForRecommendation(req)
-        );
+        return recommender.queryForRecommendation(req);
     }
 }

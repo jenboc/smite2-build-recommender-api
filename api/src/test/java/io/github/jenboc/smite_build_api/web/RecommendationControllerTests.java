@@ -12,6 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import io.github.jenboc.smite_build_api.decoding.QueryType;
+import io.github.jenboc.smite_build_api.recommending.RecommendationResponse;
 import io.github.jenboc.smite_build_api.recommending.Recommender;
 
 @WebMvcTest(RecommendationController.class)
@@ -26,7 +28,10 @@ class RecommendationControllerTests {
     @Test
     void returnsRecommendation() throws Exception {
         when(recommender.queryForRecommendation("Build me a tanky Thor"))
-            .thenReturn("Build Thor with...");
+            .thenReturn(new RecommendationResponse(
+                        QueryType.BUILD_RECOMMENDATION,
+                        "Build me a tanky Thor",
+                        "Build Thor with..."));
 
         mockMvc.perform(post("/recommend")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -34,7 +39,7 @@ class RecommendationControllerTests {
                     { "query": "Build me a tanky Thor" }
                 """))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.recommendation")
+            .andExpect(jsonPath("$.response")
                     .value("Build Thor with..."));
     }
 
