@@ -77,7 +77,8 @@ public class Recommender {
         the request, say that the available data is insufficient.
 
         When recommending items, only recommend items present in the retrieved
-        context.
+        context. Additionally, consider their active ability and passive ability.
+        Item abilities are often more important than their raw stats.
 
         Explain briefly why the recommended items fit the user's request.
     """.strip();
