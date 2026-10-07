@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.github.jenboc.smite_build_api.decoding.DecodedQuery;
 import io.github.jenboc.smite_build_api.decoding.QueryDecoder;
 
 @RestController
@@ -19,11 +18,11 @@ public class DecodingController {
     }
 
     @PostMapping
-    public DecodedQuery decode(@RequestBody RecommendationRequest req) {
+    public AbridgedDecodedQuery decode(@RequestBody RecommendationRequest req) {
         if (req.query() == null || req.query().isBlank()) {
             throw new EmptyQueryException(req.query());
         }
 
-        return decoder.decode(req.query());
+        return AbridgedDecodedQuery.summariseDecodedQuery(decoder.decode(req.query()));
     }
 }

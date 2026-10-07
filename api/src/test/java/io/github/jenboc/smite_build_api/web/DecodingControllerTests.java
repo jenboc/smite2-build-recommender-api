@@ -16,9 +16,12 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import io.github.jenboc.smite_build_api.decoding.AspectFlag;
 import io.github.jenboc.smite_build_api.decoding.DecodedQuery;
+import io.github.jenboc.smite_build_api.decoding.GodMention;
 import io.github.jenboc.smite_build_api.decoding.QueryDecoder;
 import io.github.jenboc.smite_build_api.decoding.QueryType;
+import io.github.jenboc.smite_build_api.model.God;
 import tools.jackson.databind.json.JsonMapper;
 
 @WebMvcTest(DecodingController.class)
@@ -33,11 +36,28 @@ class DecodingControllerTests {
     @MockitoBean
     private QueryDecoder decoder;
 
+    private static GodMention god(String name) {
+        God god = new God();
+        god.setName(name);
+        return new GodMention(god, AspectFlag.BASE);
+    }
+
     @Test
-    void returnsDecodedQuery() throws Exception {
-        DecodedQuery expected = new DecodedQuery(
+    void returnsAbridgedDecodedQuery() throws Exception {
+        DecodedQuery fullDecoded = new DecodedQuery(
                 QueryType.BUILD_RECOMMENDATION,
+                List.of(god("Thor")),
                 List.of(),
+                List.of(),
+                List.of(),
+                List.of(),
+                List.of(),
+                "Build me a tanky Thor"
+        );
+
+        AbridgedDecodedQuery expected = new AbridgedDecodedQuery(
+                QueryType.BUILD_RECOMMENDATION,
+                List.of(new AbridgedDecodedQuery.AbridgedGodMention("Thor", AspectFlag.BASE)),
                 List.of(),
                 List.of(),
                 List.of(),
@@ -47,7 +67,7 @@ class DecodingControllerTests {
         );
 
         when(decoder.decode("Build me a tanky Thor"))
-            .thenReturn(expected);
+            .thenReturn(fullDecoded);
 
         MvcResult res = mockMvc.perform(post("/decode")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -57,9 +77,9 @@ class DecodingControllerTests {
             .andExpect(status().isOk())
             .andReturn();
 
-        DecodedQuery actual = jsonMapper.readValue(
+        AbridgedDecodedQuery actual = jsonMapper.readValue(
                 res.getResponse().getContentAsString(),
-                DecodedQuery.class
+                AbridgedDecodedQuery.class
         );
 
         assertEquals(expected, actual);
