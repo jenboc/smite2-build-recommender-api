@@ -11,6 +11,8 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -59,13 +61,43 @@ class RecommenderTests {
             .thenReturn(generatedResponse);
     }
 
+    @ParameterizedTest
+    @EnumSource(QueryType.class)
+    void returnsQueryType(QueryType queryType) {
+        when(queryDecoder.decode(any()))
+            .thenReturn(new DecodedQuery(
+                queryType,
+                List.of(),
+                List.of(),
+                List.of(),
+                List.of(),
+                List.of(),
+                List.of(),
+                "query"
+            ));
+
+        when(gatherer.gather(any())).thenReturn(List.of());
+        when(ollamaClient.generate(any())).thenReturn("");
+
+        QueryType type = recommender.queryForRecommendation("query").queryType();
+        assertEquals(queryType, type);
+    }
+
+    @Test
+    void returnsUserQuery() {
+        setupMockCalls("query", List.of(), "GENERATED_RESPONSE");
+        String userQuery = recommender.queryForRecommendation("query").userQuery();
+
+        assertEquals(userQuery, "query");
+    }
+
     @Test
     void returnsGeneratedRecommendation() {
         // Ensure that we actually return the ollama result
         setupMockCalls("query", List.of(), "GENERATED_RESPONSE");
-        String res = recommender.queryForRecommendation("query");
+        String llmRes = recommender.queryForRecommendation("query").response();
 
-        assertEquals(res, "GENERATED_RESPONSE");
+        assertEquals(llmRes, "GENERATED_RESPONSE");
     }
 
     @Test

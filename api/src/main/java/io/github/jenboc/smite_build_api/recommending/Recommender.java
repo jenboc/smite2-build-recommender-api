@@ -33,7 +33,7 @@ public class Recommender {
      * @param userQuery the raw string user query
      * @returns the raw string of the LLM response
      */
-    public String queryForRecommendation(String userQuery) {
+    public RecommendationResponse queryForRecommendation(String userQuery) {
         DecodedQuery decoded = queryDecoder.decode(userQuery);
         return queryForRecommendation(decoded);
     }
@@ -43,7 +43,7 @@ public class Recommender {
      * @param userQuery the decoded user query
      * @returns the raw string of the LLM response
      */
-    public String queryForRecommendation(DecodedQuery userQuery) {
+    public RecommendationResponse queryForRecommendation(DecodedQuery userQuery) {
         List<IndexedChunk> ctx = contextGatherer.gather(userQuery);
 
         String prompt = switch (userQuery.type()) {
@@ -52,7 +52,13 @@ public class Recommender {
             default -> buildGeneralPrompt(userQuery.rawQuery(), ctx);
         };
 
-        return ollamaClient.generate(prompt);
+        String response = ollamaClient.generate(prompt);
+
+        return new RecommendationResponse(
+                userQuery.type(),
+                userQuery.rawQuery(),
+                response
+        );
     }
 
     private String buildRecommendationPrompt(String userQuery, List<IndexedChunk> context) {
