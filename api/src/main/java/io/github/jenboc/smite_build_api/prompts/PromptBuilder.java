@@ -35,7 +35,9 @@ public class PromptBuilder {
     public PromptBuilder withContext(List<IndexedChunk> chunks) {
         List<String> chunkTexts = chunks == null
             ? List.of()
-            : chunks.stream().map(IndexedChunk::text).toList();
+            : chunks.stream()
+                .map(c -> "[" + c.metadata().get("type").toUpperCase() + "] " + c.text())
+                .toList();
 
         addContent("context", String.join("\n\n", chunkTexts));
         return this;

@@ -29,7 +29,7 @@ class PromptBuilderTests {
 
     private static List<IndexedChunk> context() {
         return List.of(
-                new IndexedChunk("chunk 1", Map.of(), List.of(1.0)),
+                new IndexedChunk("chunk 1", Map.of("type", "yippee"), List.of(1.0)),
                 new IndexedChunk("chunk 2", Map.of("type", "test"), List.of(2.0))
         );
     }
@@ -66,9 +66,9 @@ class PromptBuilderTests {
         assertEquals(
                 """
                 ==== CONTEXT ====
-                chunk 1
+                [YIPPEE] chunk 1
 
-                chunk 2
+                [TEST] chunk 2
                 """.strip(),
                 prompt
         );
